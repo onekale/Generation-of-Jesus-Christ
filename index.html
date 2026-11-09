@@ -1,0 +1,2080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+<title>Biblical Genealogy — From Adam to Jesus Christ</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@500;700&amp;display=swap" />
+<style>
+/* ============================================================
+   DESIGN SYSTEM
+   ============================================================ */
+:root{
+  --navy:#07182B;
+  --deep-blue:#102C42;
+  --gold:#D4AF37;
+  --light-gold:#F7DE7A;
+  --cream:#FFF0D8;
+  --gray:#C7D0D8;
+  --rose:#C97B8E;
+  --blue:#5A8FB8;
+  --card-bg:rgba(16,44,66,.82);
+  --card-border:rgba(212,175,55,.35);
+  --shadow:0 8px 30px rgba(0,0,0,.45);
+  --font-serif:'Cinzel','Playfair Display',Georgia,serif;
+  --font-sans:'Inter','Segoe UI',system-ui,sans-serif;
+  --font-ethiopic:'Noto Sans Ethiopic','Nyala','Ebrima','Segoe UI',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:var(--font-sans);
+  background:var(--navy);
+  color:var(--cream);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--font-serif);letter-spacing:.02em}
+a{color:var(--light-gold);text-decoration:none}
+button{font-family:var(--font-sans);cursor:pointer;border:none;outline:none}
+
+/* ============================================================
+   BACKGROUND: ancient landscape + navy overlay + particles
+   ============================================================ */
+.bg-scene{
+  position:fixed;inset:0;z-index:-2;
+  background:
+    radial-gradient(ellipse at 50% 20%, #3a2a12 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 90%, #1a2a3a 0%, transparent 60%),
+    linear-gradient(180deg,#1a1206 0%,#2a1c0a 30%,#0d2030 65%,#050d18 100%);
+}
+.bg-scene::after{
+  content:"";position:absolute;inset:0;
+  background:
+    repeating-linear-gradient(115deg, transparent 0 40px, rgba(212,175,55,.02) 40px 41px),
+    radial-gradient(circle at 50% 50%, transparent 40%, rgba(7,24,43,.85) 100%);
+  pointer-events:none;
+}
+.particles{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.particle{
+  position:absolute;border-radius:50%;
+  background:radial-gradient(circle,var(--light-gold) 0%,transparent 70%);
+  animation:float linear infinite;opacity:.5;
+}
+@keyframes float{
+  0%{transform:translateY(0) translateX(0);opacity:0}
+  10%{opacity:.6}
+  90%{opacity:.6}
+  100%{transform:translateY(-120vh) translateX(40px);opacity:0}
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+header{
+  position:sticky;top:0;z-index:50;
+  display:flex;align-items:center;gap:24px;
+  padding:14px 32px;
+  background:rgba(7,24,43,.85);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(212,175,55,.18);
+  flex-wrap:wrap;
+}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.cross{
+  width:34px;height:34px;flex:0 0 auto;
+  display:grid;place-items:center;
+  border:1.5px solid var(--gold);border-radius:50%;
+  color:var(--gold);font-size:18px;
+  box-shadow:0 0 16px rgba(212,175,55,.35);
+}
+.brand h1{font-size:16px;line-height:1.1;color:var(--light-gold);white-space:nowrap}
+.brand small{display:block;font-size:10px;letter-spacing:.28em;color:var(--gray);text-transform:uppercase;font-family:var(--font-sans);font-weight:400}
+nav{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+nav a{
+  font-size:12.5px;letter-spacing:.06em;color:var(--gray);
+  padding:8px 12px;border-radius:6px;transition:.2s;
+}
+nav a:hover{color:var(--light-gold);background:rgba(212,175,55,.08)}
+.search-wrap{position:relative}
+.search-wrap input{
+  background:rgba(0,0,0,.35);border:1px solid rgba(212,175,55,.3);
+  color:var(--cream);padding:9px 14px 9px 36px;border-radius:20px;
+  font-size:12.5px;width:210px;transition:.25s;
+}
+.search-wrap input:focus{outline:none;border-color:var(--gold);width:260px;box-shadow:0 0 0 3px rgba(212,175,55,.12)}
+.search-wrap::before{content:"⌕";position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--gold);font-size:16px}
+.search-results{
+  position:absolute;top:calc(100% + 8px);left:0;right:0;
+  background:#0b1d30;border:1px solid rgba(212,175,55,.3);border-radius:10px;
+  max-height:320px;overflow-y:auto;box-shadow:var(--shadow);display:none;
+}
+.search-results.open{display:block}
+.search-results button{
+  display:block;width:100%;text-align:left;padding:10px 14px;background:none;
+  color:var(--cream);font-size:13px;border-bottom:1px solid rgba(255,255,255,.05);
+}
+.search-results button:hover{background:rgba(212,175,55,.12);color:var(--light-gold)}
+.search-results small{color:var(--gray);font-size:10.5px;display:block;margin-top:2px}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  text-align:center;padding:80px 24px 64px;position:relative;
+}
+.hero h2{
+  font-size:clamp(28px,5vw,54px);color:var(--light-gold);
+  text-shadow:0 0 40px rgba(212,175,55,.4);margin-bottom:16px;
+}
+.hero p{font-size:clamp(14px,2vw,18px);color:var(--gray);max-width:640px;margin:0 auto 32px}
+.hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn{
+  padding:13px 26px;border-radius:8px;font-size:13px;letter-spacing:.1em;
+  text-transform:uppercase;font-weight:600;transition:.25s;font-family:var(--font-sans);
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--gold),#b8932b);color:#0b1a2b;
+  box-shadow:0 6px 24px rgba(212,175,55,.35);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(212,175,55,.5)}
+.btn-ghost{
+  background:transparent;border:1px solid rgba(212,175,55,.5);color:var(--light-gold);
+}
+.btn-ghost:hover{background:rgba(212,175,55,.1)}
+
+/* ============================================================
+   TREE SECTION — FULL VIEWPORT IMMERSIVE
+   ============================================================ */
+.tree-section{
+  position:relative;
+  height:calc(100vh - 72px);
+  min-height:0;
+  margin:0 0 12px;
+  overflow:hidden;
+  border-top:1px solid rgba(212,175,55,.15);
+  border-bottom:1px solid rgba(212,175,55,.15);
+  background:
+    radial-gradient(ellipse at 30% 0%, rgba(212,175,55,.08), transparent 60%),
+    radial-gradient(ellipse at 70% 100%, rgba(90,143,184,.08), transparent 60%),
+    rgba(5,13,24,.55);
+}
+.tree-viewport{
+  position:absolute;inset:0;overflow:hidden;cursor:grab;
+  touch-action:none;
+}
+.tree-viewport.dragging{cursor:grabbing}
+.tree-canvas{
+  position:absolute;top:0;left:0;
+  transform-origin:0 0;
+  will-change:transform;
+  transition:transform .8s cubic-bezier(.22,.61,.36,1);
+}
+.tree-viewport{transition:box-shadow .35s}
+.tree-viewport.following{box-shadow:inset 0 0 0 2px rgba(212,175,55,.55)}
+.tree-canvas.no-anim{transition:none}
+
+/* SVG connectors */
+.connectors{
+  position:absolute;top:0;left:0;overflow:visible;pointer-events:none;
+}
+.connectors path{
+  fill:none;stroke-width:2;stroke-linecap:round;
+  transition:opacity .4s;
+}
+.connectors path.main{stroke:var(--gold);stroke-width:2.6;filter:drop-shadow(0 0 4px rgba(212,175,55,.6))}
+.connectors path.marriage{stroke:var(--rose);stroke-dasharray:6 4}
+.connectors path.sibling{stroke:var(--blue);stroke-width:1.6}
+.connectors path.draw{
+  stroke-dasharray:var(--len);stroke-dashoffset:var(--len);
+  animation:drawLine .7s ease forwards;
+}
+@keyframes drawLine{to{stroke-dashoffset:0}}
+
+/* Person cards */
+.person{
+  position:absolute;
+  width:170px;
+  background:var(--card-bg);
+  border:1px solid var(--card-border);
+  border-radius:14px;
+  padding:12px 10px 10px;
+  text-align:center;
+  backdrop-filter:blur(6px);
+  box-shadow:0 6px 22px rgba(0,0,0,.45);
+  transition:transform .25s, box-shadow .25s, border-color .25s, opacity .4s;
+  cursor:pointer;
+  opacity:0;
+  transform:translateY(14px) scale(.92);
+  animation:cardIn .5s cubic-bezier(.22,.61,.36,1) forwards;
+}
+@keyframes cardIn{to{opacity:1;transform:translateY(0) scale(1)}}
+.person:hover{
+  transform:translateY(-3px) scale(1.045);
+  border-color:var(--light-gold);
+  box-shadow:0 12px 32px rgba(212,175,55,.28);
+  z-index:5;
+}
+.person.selected{
+  border-color:var(--light-gold);
+  box-shadow:0 0 0 2px var(--light-gold), 0 0 30px rgba(247,222,122,.55);
+}
+.person.female{border-color:rgba(201,123,142,.55)}
+.person.female .avatar{background:radial-gradient(circle at 30% 30%,#e6a5b3,#7a3a48);color:#fff}
+.person.main-line::before{
+  content:"";position:absolute;inset:-2px;border-radius:16px;
+  border:1.5px solid var(--gold);opacity:.7;pointer-events:none;
+  animation:mainGlow 3s ease-in-out infinite;
+}
+@keyframes mainGlow{0%,100%{opacity:.35;box-shadow:0 0 10px rgba(212,175,55,.3)}50%{opacity:.85;box-shadow:0 0 24px rgba(212,175,55,.6)}}
+.person.special{
+  background:linear-gradient(160deg,rgba(212,175,55,.22),rgba(16,44,66,.92));
+  border-color:var(--light-gold);
+  box-shadow:0 0 40px rgba(247,222,122,.55), 0 0 80px rgba(212,175,55,.3);
+  width:200px;
+}
+.person.special .avatar{width:74px;height:74px;font-size:28px;background:radial-gradient(circle at 30% 30%,#fff6cc,#c39a1e)}
+.person.special .name{font-size:16px;color:#fff}
+.person.special::after{
+  content:"";position:absolute;inset:-6px;border-radius:20px;
+  background:conic-gradient(from 0deg,transparent,rgba(247,222,122,.4),transparent 40%);
+  animation:spin 6s linear infinite;z-index:-1;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.avatar{
+  width:52px;height:52px;margin:0 auto 8px;border-radius:50%;
+  display:grid;place-items:center;
+  font-family:var(--font-serif);font-size:20px;font-weight:700;
+  background:radial-gradient(circle at 30% 30%,#4a6784,#12283c);
+  color:var(--light-gold);
+  border:1.5px solid rgba(212,175,55,.5);
+  box-shadow:inset 0 0 12px rgba(0,0,0,.5);
+}
+.person .name{font-family:var(--font-serif);font-size:13.5px;color:var(--light-gold);line-height:1.25;overflow-wrap:anywhere}
+body.lang-am .person .name,
+body.lang-am .profile-head h3,
+body.lang-am .chip,
+body.lang-am .search-results button,
+body.lang-am .mode-status{
+  font-family:var(--font-ethiopic);
+  letter-spacing:0;
+}
+body.lang-am .person .name{font-size:15px;line-height:1.35;font-weight:500}
+body.lang-am .profile-head h3{font-weight:700}
+body.lang-am .chip{font-size:13px}
+.person .role{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gray);margin-top:3px}
+.person .gen{font-size:9px;color:var(--blue);margin-top:2px;letter-spacing:.08em}
+.person .toggle{
+  margin-top:8px;font-size:10px;padding:4px 10px;border-radius:20px;
+  background:rgba(212,175,55,.14);color:var(--light-gold);
+  border:1px solid rgba(212,175,55,.3);letter-spacing:.06em;
+  transition:.2s;
+}
+.person .toggle:hover{background:var(--gold);color:#0b1a2b}
+.person.just-in{
+  z-index:6;
+  opacity:1 !important;
+  border-color:var(--light-gold);
+  box-shadow:0 0 0 2px var(--light-gold), 0 0 28px rgba(247,222,122,.8);
+}
+
+/* ============================================================
+   TOOLBAR (floating)
+   ============================================================ */
+.toolbar{
+  position:absolute;top:16px;left:16px;z-index:20;
+  display:flex;flex-direction:column;gap:8px;
+}
+.toolbar .group{
+  display:flex;background:rgba(7,24,43,.88);backdrop-filter:blur(10px);
+  border:1px solid rgba(212,175,55,.25);border-radius:10px;overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.toolbar button{
+  width:38px;height:38px;background:none;color:var(--cream);
+  font-size:15px;display:grid;place-items:center;transition:.18s;
+  border-right:1px solid rgba(255,255,255,.06);
+}
+.toolbar button:last-child{border-right:none}
+.toolbar button:hover{background:rgba(212,175,55,.18);color:var(--light-gold)}
+.toolbar button.active{background:var(--gold);color:#0b1a2b}
+
+/* View mode: show everything, or open one generation at a time */
+.mode-bar{
+  position:absolute;top:14px;left:50%;transform:translateX(-50%);
+  z-index:24;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;
+  width:max-content;max-width:calc(100% - 108px);
+  background:rgba(7,24,43,.92);backdrop-filter:blur(12px);
+  border:1px solid rgba(212,175,55,.38);border-radius:18px;
+  padding:8px 10px 6px;box-shadow:var(--shadow);
+}
+.mode-toggle,.mode-step{display:flex;gap:4px;background:rgba(0,0,0,.28);border-radius:12px;padding:3px}
+.mode-bar button{
+  background:transparent;color:var(--gray);border-radius:9px;
+  padding:7px 12px;font-size:12px;font-weight:600;letter-spacing:.02em;
+  transition:.18s;
+}
+.mode-toggle button.active{background:var(--gold);color:#0b1a2b}
+.mode-toggle button:hover{color:var(--light-gold)}
+.mode-toggle button.active:hover{background:var(--light-gold);color:#0b1a2b}
+.mode-step button{color:var(--light-gold)}
+.mode-step button:hover{background:rgba(212,175,55,.18)}
+.mode-status{
+  flex-basis:100%;text-align:center;font-size:11px;color:var(--gray);
+  letter-spacing:.01em;padding:1px 8px 2px;line-height:1.4;
+}
+
+/* Legend */
+.legend{
+  position:absolute;bottom:16px;left:16px;z-index:20;
+  background:rgba(7,24,43,.88);backdrop-filter:blur(10px);
+  border:1px solid rgba(212,175,55,.25);border-radius:10px;
+  padding:12px 14px;font-size:11px;color:var(--gray);
+  max-width:230px;
+}
+.legend h4{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--light-gold);margin-bottom:8px}
+.legend .row{display:flex;align-items:center;gap:8px;margin:5px 0}
+.legend .swatch{width:18px;height:2px;border-radius:2px}
+.legend .swatch.gold{background:var(--gold)}
+.legend .swatch.rose{background:var(--rose)}
+.legend .swatch.blue{background:var(--blue)}
+.legend .swatch.vert{width:2px;height:14px;background:var(--gold)}
+
+/* Journey bar */
+.journey-bar{
+  position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+  z-index:20;display:none;align-items:center;gap:14px;
+  background:rgba(7,24,43,.92);backdrop-filter:blur(10px);
+  border:1px solid rgba(212,175,55,.35);border-radius:40px;
+  padding:10px 18px;box-shadow:var(--shadow);max-width:calc(100% - 32px);
+}
+.journey-bar.active{display:flex}
+.journey-bar button{
+  background:rgba(212,175,55,.14);color:var(--light-gold);
+  border:1px solid rgba(212,175,55,.35);border-radius:50%;
+  width:36px;height:36px;font-size:14px;display:grid;place-items:center;
+  transition:.2s;flex:0 0 auto;
+}
+.journey-bar button:hover{background:var(--gold);color:#0b1a2b}
+.journey-info{text-align:center;min-width:0}
+.journey-info .title{font-family:var(--font-serif);font-size:13px;color:var(--light-gold);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px}
+.journey-info .desc{font-size:10.5px;color:var(--gray);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px}
+.journey-progress{
+  position:absolute;top:0;left:20px;right:20px;height:2px;
+  background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;
+}
+.journey-progress .fill{height:100%;background:var(--gold);transition:width .4s;width:0}
+
+/* ============================================================
+   PROFILE PANEL
+   ============================================================ */
+.profile-panel{
+  position:fixed;top:0;right:0;bottom:0;width:min(420px,92vw);
+  background:linear-gradient(180deg,#0b1d30,#07182B);
+  border-left:1px solid rgba(212,175,55,.3);
+  box-shadow:-20px 0 60px rgba(0,0,0,.6);
+  z-index:100;transform:translateX(105%);
+  transition:transform .45s cubic-bezier(.22,.61,.36,1);
+  display:flex;flex-direction:column;overflow-y:auto;
+}
+.profile-panel.open{transform:translateX(0)}
+.profile-head{
+  padding:22px 22px 16px;border-bottom:1px solid rgba(212,175,55,.18);
+  position:relative;
+}
+.profile-close{
+  position:absolute;top:14px;right:14px;width:32px;height:32px;
+  border-radius:50%;background:rgba(255,255,255,.06);color:var(--cream);
+  font-size:16px;display:grid;place-items:center;transition:.2s;
+}
+.profile-close:hover{background:rgba(212,175,55,.2);color:var(--light-gold)}
+.profile-head .big-avatar{
+  width:76px;height:76px;border-radius:50%;display:grid;place-items:center;
+  font-family:var(--font-serif);font-size:30px;font-weight:700;
+  background:radial-gradient(circle at 30% 30%,#4a6784,#12283c);
+  color:var(--light-gold);border:2px solid rgba(212,175,55,.5);
+  margin-bottom:12px;box-shadow:0 0 24px rgba(212,175,55,.25);
+}
+.profile-head h3{font-size:22px;color:var(--light-gold)}
+.profile-head .sub{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gray);margin-top:4px}
+.profile-head .refs{font-size:11px;color:var(--blue);margin-top:8px;line-height:1.5}
+.profile-body{padding:18px 22px 30px}
+.profile-body p.bio{font-size:13.5px;line-height:1.7;color:#dbe4ec;margin-bottom:18px}
+.rel-block{margin-bottom:16px}
+.rel-block h4{
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:8px;font-family:var(--font-sans);font-weight:600;
+}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{
+  font-size:11.5px;padding:5px 10px;border-radius:20px;
+  background:rgba(90,143,184,.14);border:1px solid rgba(90,143,184,.3);
+  color:#bcd3e6;cursor:pointer;transition:.18s;
+}
+.chip:hover{background:rgba(90,143,184,.3);color:#fff}
+.chip.wife{background:rgba(201,123,142,.14);border-color:rgba(201,123,142,.35);color:#e8b8c4}
+.chip.wife:hover{background:rgba(201,123,142,.3)}
+.chip.parent{background:rgba(212,175,55,.12);border-color:rgba(212,175,55,.3);color:var(--light-gold)}
+.chip.parent:hover{background:rgba(212,175,55,.28)}
+.chip.child{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12);color:var(--cream)}
+.profile-actions{display:flex;gap:10px;margin-top:18px}
+.profile-actions button{
+  flex:1;padding:11px;border-radius:8px;font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;font-weight:600;transition:.2s;
+}
+.profile-actions .primary{background:var(--gold);color:#0b1a2b}
+.profile-actions .primary:hover{background:var(--light-gold)}
+.profile-actions .secondary{background:transparent;border:1px solid rgba(212,175,55,.4);color:var(--light-gold)}
+.profile-actions .secondary:hover{background:rgba(212,175,55,.12)}
+
+/* ============================================================
+   CONTENT SECTIONS (timeline, verses, about)
+   ============================================================ */
+.content-section{padding:70px 24px;max-width:1100px;margin:0 auto}
+.content-section h2{font-size:clamp(24px,4vw,38px);color:var(--light-gold);text-align:center;margin-bottom:8px}
+.content-section .lead{text-align:center;color:var(--gray);max-width:600px;margin:0 auto 44px;font-size:14px}
+
+/* Timeline */
+.timeline{position:relative;padding-left:40px}
+.timeline::before{
+  content:"";position:absolute;left:14px;top:0;bottom:0;width:2px;
+  background:linear-gradient(180deg,transparent,var(--gold),transparent);
+}
+.tl-item{position:relative;margin-bottom:26px;padding-left:14px}
+.tl-item::before{
+  content:"";position:absolute;left:-33px;top:6px;width:12px;height:12px;
+  border-radius:50%;background:var(--navy);border:2px solid var(--gold);
+  box-shadow:0 0 12px rgba(212,175,55,.5);
+}
+.tl-item h3{font-size:16px;color:var(--light-gold);margin-bottom:4px}
+.tl-item .era{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:6px}
+.tl-item p{font-size:13px;color:var(--gray);line-height:1.6}
+
+/* Verses */
+.verses-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+.verse-card{
+  background:var(--card-bg);border:1px solid rgba(212,175,55,.22);
+  border-radius:14px;padding:22px;transition:.25s;
+}
+.verse-card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 12px 32px rgba(212,175,55,.15)}
+.verse-card .ref{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;font-family:var(--font-sans);font-weight:600}
+.verse-card .text{font-family:var(--font-serif);font-size:14.5px;line-height:1.65;color:var(--cream);font-style:italic}
+.verse-card .note{font-size:11px;color:var(--gray);margin-top:10px;line-height:1.5}
+
+/* About / distinction panel */
+.distinction{
+  background:linear-gradient(140deg,rgba(212,175,55,.08),rgba(16,44,66,.6));
+  border:1px solid rgba(212,175,55,.3);border-radius:16px;padding:28px;
+  margin-top:30px;
+}
+.distinction h3{color:var(--light-gold);font-size:18px;margin-bottom:12px}
+.distinction p{font-size:13.5px;line-height:1.75;color:#dbe4ec;margin-bottom:12px}
+.distinction .cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px}
+@media(max-width:640px){.distinction .cols{grid-template-columns:1fr}}
+.distinction .col{background:rgba(0,0,0,.25);border-radius:10px;padding:16px}
+.distinction .col h4{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.distinction .col p{font-size:12.5px;margin:0}
+
+footer{
+  text-align:center;padding:40px 24px;color:var(--gray);font-size:12px;
+  border-top:1px solid rgba(212,175,55,.15);line-height:1.8;
+}
+footer .gold{color:var(--gold)}
+
+/* Responsive */
+@media(max-width:900px){
+  header{padding:12px 16px;gap:12px}
+  nav{order:3;width:100%;margin-left:0;justify-content:center}
+  .search-wrap input{width:160px}
+  .search-wrap input:focus{width:200px}
+  .tree-section{height:calc(100vh - 120px)}
+  .legend{display:none}
+  .mode-bar{max-width:calc(100% - 24px);top:auto;bottom:14px}
+  .tree-section:has(.journey-bar.active) .mode-bar{bottom:78px}
+  .journey-info .title,.journey-info .desc{max-width:180px}
+}
+@media(max-width:520px){
+  .brand h1{font-size:13px}
+  .brand small{font-size:8.5px}
+  .person{width:140px;padding:10px 8px}
+  .person.special{width:160px}
+  .person .name{font-size:12px}
+  .avatar{width:44px;height:44px;font-size:17px}
+  .toolbar button{width:34px;height:34px;font-size:13px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+</style>
+</head>
+<body>
+
+<!-- Background -->
+<div class="bg-scene"></div>
+<div class="particles" id="particles"></div>
+
+<!-- Header -->
+<header>
+  <div class="brand">
+    <div class="cross">✝</div>
+    <div>
+      <h1>Biblical Genealogy</h1>
+      <small>From Adam to Jesus</small>
+    </div>
+  </div>
+  <nav>
+    <a href="#hero">Home</a>
+    <a href="#tree">Family Tree</a>
+    <a href="#timeline">Timeline</a>
+    <a href="#verses">Bible Verses</a>
+    <a href="#about">About</a>
+  </nav>
+  <div class="search-wrap">
+    <input id="searchInput" type="text" placeholder="Search a name…" autocomplete="off" />
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <h2>The Genealogy of Jesus Christ</h2>
+  <p>From Adam, through generations, to the Savior of the world. Explore a living family tree of Scripture — parents, spouses, siblings, and children — from Eden to Bethlehem.</p>
+  <div class="hero-actions">
+    <button class="btn btn-primary" onclick="document.getElementById('tree').scrollIntoView({behavior:'smooth'})">Explore the Family Tree</button>
+    <button class="btn btn-ghost" onclick="Journey.start()">Begin Cinematic Journey</button>
+  </div>
+</section>
+
+<!-- Tree -->
+<section class="tree-section" id="tree" style="scroll-margin-top:72px">
+  <div class="tree-viewport" id="viewport">
+    <div class="tree-canvas" id="canvas">
+      <svg class="connectors" id="connectors"></svg>
+      <!-- person cards injected here -->
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="group">
+      <button id="zoomIn" title="Zoom in">＋</button>
+      <button id="zoomOut" title="Zoom out">−</button>
+      <button id="resetView" title="Reset view">⟲</button>
+    </div>
+    <div class="group">
+      <button id="expandAll" title="Show the whole tree at once">⊞</button>
+      <button id="collapseAll" title="Step through one generation at a time">⊟</button>
+      <button id="centerSel" title="Center selected person">◎</button>
+    </div>
+    <div class="group">
+      <button id="journeyToggle" title="Cinematic journey">▶</button>
+      <button id="fullscreen" title="Full screen">⛶</button>
+    </div>
+  </div>
+
+  <div class="mode-bar" id="modeBar">
+    <div class="mode-toggle">
+      <button type="button" id="modeExplore">Step by step</button>
+      <button type="button" id="modeAll">Show all at once</button>
+    </div>
+    <div class="mode-step">
+      <button type="button" id="stepPrev" title="Move back to the parent">↑ Back</button>
+      <button type="button" id="stepNext" title="Open the next descendant and follow them">↓ Next descendant</button>
+    </div>
+    <div class="mode-toggle" id="langToggle">
+      <button type="button" id="langEn" class="active" title="Show names in English">English</button>
+      <button type="button" id="langAm" title="ስሞችን በአማርኛ መጽሐፍ ቅዱስ አሳይ">አማርኛ</button>
+    </div>
+    <div class="mode-status" id="modeStatus">Expand a person and the view follows.</div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <h4>Legend</h4>
+    <div class="row"><span class="swatch gold"></span> Main ancestral lineage</div>
+    <div class="row"><span class="swatch rose"></span> Marriage relationship</div>
+    <div class="row"><span class="swatch blue"></span> Siblings / other branches</div>
+    <div class="row"><span class="swatch vert"></span> Parent → child</div>
+  </div>
+
+  <!-- Journey bar -->
+  <div class="journey-bar" id="journeyBar">
+    <div class="journey-progress"><div class="fill" id="journeyFill"></div></div>
+    <button id="journeyPrev" title="Previous">‹</button>
+    <div class="journey-info">
+      <div class="title" id="journeyTitle">—</div>
+      <div class="desc" id="journeyDesc">—</div>
+    </div>
+    <button id="journeyNext" title="Next">›</button>
+    <button id="journeyExit" title="Exit journey">✕</button>
+  </div>
+</section>
+
+<!-- Profile panel -->
+<aside class="profile-panel" id="profilePanel">
+  <div class="profile-head">
+    <button class="profile-close" id="profileClose">✕</button>
+    <div class="big-avatar" id="pAvatar">?</div>
+    <h3 id="pName">—</h3>
+    <div class="sub" id="pSub">—</div>
+    <div class="refs" id="pRefs">—</div>
+  </div>
+  <div class="profile-body">
+    <p class="bio" id="pBio">—</p>
+    <div class="rel-block"><h4>Father</h4><div class="chips" id="pFather"></div></div>
+    <div class="rel-block"><h4>Mother</h4><div class="chips" id="pMother"></div></div>
+    <div class="rel-block"><h4>Spouse(s)</h4><div class="chips" id="pSpouses"></div></div>
+    <div class="rel-block"><h4>Children</h4><div class="chips" id="pChildren"></div></div>
+    <div class="rel-block"><h4>Siblings</h4><div class="chips" id="pSiblings"></div></div>
+    <div class="profile-actions">
+      <button class="primary" id="pExpand">Expand &amp; follow</button>
+      <button class="secondary" id="pFocus">Focus This Person</button>
+    </div>
+  </div>
+</aside>
+
+<!-- Timeline -->
+<section class="content-section" id="timeline">
+  <h2>The Biblical Timeline</h2>
+  <p class="lead">Major epochs from Creation to the birth of Christ.</p>
+  <div class="timeline" id="timelineList"></div>
+</section>
+
+<!-- Verses -->
+<section class="content-section" id="verses">
+  <h2>Key Bible Verses</h2>
+  <p class="lead">The scriptural foundation for this genealogy.</p>
+  <div class="verses-grid" id="versesGrid"></div>
+</section>
+
+<!-- About / Distinction -->
+<section class="content-section" id="about">
+  <h2>Two Genealogies of Jesus</h2>
+  <p class="lead">Matthew and Luke record distinct lines. This site preserves both.</p>
+  <div class="distinction">
+    <h3>Why are there two genealogies?</h3>
+    <p>Matthew 1:1–17 traces the <strong>royal line</strong> through David's son <strong>Solomon</strong>, following the kings of Judah to Joseph, Jesus' legal/earthly father. Luke 3:23–38 traces a different line through David's son <strong>Nathan</strong>, and is often understood as Mary's lineage (or a levirate/adoptive line) — though interpreters differ. Both are preserved here as distinct branches, not merged into one sequence.</p>
+    <div class="cols">
+      <div class="col">
+        <h4>Matthew 1:1–17</h4>
+        <p>Abraham → Isaac → Jacob → Judah → Perez → … → Jesse → <strong>David</strong> → <strong>Solomon</strong> → … → the Babylonian exile → … → Joseph, husband of Mary.</p>
+      </div>
+      <div class="col">
+        <h4>Luke 3:23–38</h4>
+        <p>Jesus → Joseph (as supposed) → … → <strong>David</strong> → <strong>Nathan</strong> → … → Abraham → … → Adam → God. Preserved in its own sequence.</p>
+      </div>
+    </div>
+    <p style="margin-top:16px;font-size:12.5px;color:var(--gray)">Note: Where Scripture does not name a wife, this site displays "Wife (name not recorded in Scripture)" rather than inventing a name. Relationships that are legal or traditional (e.g., Joseph as Jesus' legal father) are labeled accordingly.</p>
+  </div>
+</section>
+
+<footer>
+  <span class="gold">✝</span> Biblical Genealogy — From Adam to Jesus Christ<br>
+  Scripture references: Genesis, Ruth, 1–2 Samuel, Matthew 1, Luke 3.<br>
+  Amharic names follow the Amharic Bible (Bible Society of Ethiopia). Where Scripture records no personal name, none is supplied.<br>
+  Built as an interactive family-tree exploration.
+</footer>
+
+<script>
+/* ============================================================
+   MODULE 1 — DATA
+   Structured genealogical model. Each person:
+   {id,name,gender,father,mother,spouses:[],children:[],siblings:[],
+    refs,bio,gen,mainLine:bool,special:bool,wifeUnnamed:bool}
+   ============================================================ */
+const DATA = (() => {
+  const P = {};
+  const add = (o) => { P[o.id] = { spouses:[], children:[], siblings:[], refs:'', bio:'', gen:0, mainLine:false, ...o }; return o.id; };
+
+  // Helper to auto-fill reverse relationships later
+  const link = (parentId, childId) => {
+    if(!P[parentId] || !P[childId]) return;
+    if(!P[parentId].children.includes(childId)) P[parentId].children.push(childId);
+    if(P[parentId].gender === 'male') P[childId].father = parentId;
+    else if(P[parentId].gender === 'female') P[childId].mother = parentId;
+  };
+  const marry = (a,b) => {
+    if(!P[a]||!P[b]) return;
+    if(!P[a].spouses.includes(b)) P[a].spouses.push(b);
+    if(!P[b].spouses.includes(a)) P[b].spouses.push(a);
+  };
+  const sibs = (arr) => arr.forEach(id => {
+    P[id].siblings = arr.filter(x => x !== id);
+  });
+
+  /* ---------- A. Adam & Eve ---------- */
+  add({id:'adam',name:'Adam',gender:'male',gen:1,mainLine:true,
+       refs:'Genesis 2:7; 5:1–5',bio:'The first man, formed by God from the dust of the ground and given dominion over creation. Father of Cain, Abel, Seth, and other sons and daughters (Genesis 5:4).'});
+  add({id:'eve',name:'Eve',gender:'female',gen:1,
+       refs:'Genesis 3:20; 4:1',bio:'The first woman, called "mother of all living." Formed from Adam\'s side as a companion and co-heir of the garden.'});
+  marry('adam','eve');
+
+  add({id:'cain',name:'Cain',gender:'male',gen:2,
+       refs:'Genesis 4:1–16',bio:'Firstborn of Adam and Eve. A tiller of the ground whose offering was rejected; he murdered his brother Abel and was marked by God.'});
+  add({id:'abel',name:'Abel',gender:'male',gen:2,
+       refs:'Genesis 4:2–8',bio:'Second son of Adam and Eve, a keeper of sheep. His offering was accepted by God; he was slain by his brother Cain.'});
+  add({id:'seth',name:'Seth',gender:'male',gen:2,mainLine:true,
+       refs:'Genesis 4:25–26; 5:3',bio:'Son born to Adam and Eve after Abel\'s death. His line carries the promise and leads to Noah and ultimately to Abraham.'});
+  add({id:'other_adam',name:'Other Sons & Daughters',gender:'mixed',gen:2,
+       refs:'Genesis 5:4',bio:'Scripture records that Adam and Eve had other sons and daughters beyond Cain, Abel, and Seth. Their names are not recorded.'});
+
+  link('adam','cain');link('adam','abel');link('adam','seth');link('adam','other_adam');
+  link('eve','cain');link('eve','abel');link('eve','seth');link('eve','other_adam');
+  sibs(['cain','abel','seth','other_adam']);
+
+  /* ---------- B. Seth → Noah ---------- */
+  const sethLine = ['enosh','kenan','mahalalel','jared','enoch','methuselah','lamech','noah'];
+  const sethNames = ['Enosh','Kenan','Mahalalel','Jared','Enoch','Methuselah','Lamech','Noah'];
+  const sethRefs = ['Genesis 4:26; 5:6','Genesis 5:9','Genesis 5:12','Genesis 5:15','Genesis 5:18–24','Genesis 5:21','Genesis 5:25','Genesis 5:28–29'];
+  const sethBios = [
+    'Son of Seth; in his days people began to call upon the name of the LORD.',
+    'Son of Enosh; a patriarch of the ante-diluvian line.',
+    'Son of Kenan; walked with God in his generation.',
+    'Son of Mahalalel; father of Enoch.',
+    'Walked faithfully with God and was taken up, so that he did not experience death (Genesis 5:24).',
+    'The longest-lived person in Scripture; father of Lamech.',
+    'Son of Methuselah; father of Noah.',
+    'Righteous man chosen to build the ark; father of Shem, Ham, and Japheth.'
+  ];
+  let prev = 'seth';
+  sethLine.forEach((id,i) => {
+    add({id,name:sethNames[i],gender:'male',gen:3+i,mainLine:true,refs:sethRefs[i],bio:sethBios[i]});
+    link(prev,id);
+    prev = id;
+  });
+  // Wives (unnamed where Scripture does not name)
+  add({id:'wife_enosh',name:'Wife of Enosh',gender:'female',gen:3,wifeUnnamed:true,refs:'Not named in Scripture',bio:'Name not recorded in Scripture.'});
+  marry('enosh','wife_enosh');
+  add({id:'wife_lamech',name:'Wife of Lamech',gender:'female',gen:10,wifeUnnamed:true,refs:'Not named in Scripture',bio:'Name not recorded in Scripture.'});
+  marry('lamech','wife_lamech');
+
+  /* ---------- C. Noah's family ---------- */
+  add({id:'wife_noah',name:'Wife of Noah',gender:'female',gen:10,wifeUnnamed:true,refs:'Genesis 7:7 (not named)',bio:'Entered the ark with Noah. Name not recorded in Scripture.'});
+  marry('noah','wife_noah');
+  add({id:'shem',name:'Shem',gender:'male',gen:11,mainLine:true,refs:'Genesis 5:32; 6:10; 11:10',bio:'Son of Noah; his descendants carry the line to Abraham.'});
+  add({id:'ham',name:'Ham',gender:'male',gen:11,refs:'Genesis 5:32; 9:18–27',bio:'Son of Noah; father of Canaan and the peoples of Africa and Canaan.'});
+  add({id:'japheth',name:'Japheth',gender:'male',gen:11,refs:'Genesis 5:32; 10:2–5',bio:'Son of Noah; ancestor of various maritime and northern peoples.'});
+  link('noah','shem');link('noah','ham');link('noah','japheth');
+  link('wife_noah','shem');link('wife_noah','ham');link('wife_noah','japheth');
+  sibs(['shem','ham','japheth']);
+
+  /* ---------- D. Shem → Abraham ---------- */
+  const shemLine = ['arphaxad','shelah','eber','peleg','reu','serug','nahor','terah','abraham'];
+  const shemNames = ['Arphaxad','Shelah','Eber','Peleg','Reu','Serug','Nahor','Terah','Abraham'];
+  const shemRefs = ['Genesis 11:10','Genesis 11:12','Genesis 11:14','Genesis 11:16','Genesis 11:18','Genesis 11:20','Genesis 11:22','Genesis 11:24','Genesis 11:26–27'];
+  const shemBios = [
+    'Son of Shem; born two years after the flood.',
+    'Son of Arphaxad; a link in the post-flood line.',
+    'Son of Shelah; ancestor of the Hebrews (cf. "Eber").',
+    'Son of Eber; in his days the earth was divided.',
+    'Son of Peleg; patriarch of the line.',
+    'Son of Reu; patriarch of the line.',
+    'Son of Serug; grandfather of Abraham.',
+    'Son of Nahor; father of Abraham, Nahor, and Haran.',
+    'Father of many nations; called by God out of Ur to Canaan. Father of Isaac through Sarah.'
+  ];
+  prev = 'shem';
+  shemLine.forEach((id,i) => {
+    add({id,name:shemNames[i],gender:'male',gen:12+i,mainLine:true,refs:shemRefs[i],bio:shemBios[i]});
+    link(prev,id);
+    prev = id;
+  });
+  // Cainan note (Luke 3:36)
+  add({id:'note_cainan',name:'Cainan (Luke 3:36)',gender:'male',gen:13,
+       refs:'Luke 3:36',bio:'Luke 3:36 includes an additional "Cainan" between Arphaxad and Shelah not present in the Hebrew Masoretic text of Genesis. This site follows the Genesis line as primary and notes Luke\'s variant.'});
+
+  /* ---------- E. Abraham's family ---------- */
+  add({id:'sarah',name:'Sarah',gender:'female',gen:20,refs:'Genesis 17:15; 21:1–7',bio:'Wife of Abraham; mother of Isaac in her old age, as God promised.'});
+  add({id:'hagar',name:'Hagar',gender:'female',gen:20,refs:'Genesis 16; 21:8–21',bio:'Egyptian servant of Sarah; mother of Ishmael.'});
+  add({id:'keturah',name:'Keturah',gender:'female',gen:20,refs:'Genesis 25:1–4',bio:'Wife of Abraham after Sarah\'s death; mother of six sons.'});
+  marry('abraham','sarah');marry('abraham','hagar');marry('abraham','keturah');
+
+  add({id:'isaac',name:'Isaac',gender:'male',gen:21,mainLine:true,refs:'Genesis 17:19; 21:1–7; 22',bio:'Son of promise, born to Abraham and Sarah. Father of Esau and Jacob.'});
+  add({id:'ishmael',name:'Ishmael',gender:'male',gen:21,refs:'Genesis 16; 17:20; 21:8–21',bio:'Son of Abraham and Hagar; blessed by God to become a great nation.'});
+  ['zimran','jokshan','medan','midian','ishbak','shuah'].forEach((id,i)=>{
+    const names=['Zimran','Jokshan','Medan','Midian','Ishbak','Shuah'];
+    add({id,name:names[i],gender:'male',gen:21,refs:'Genesis 25:1–2',bio:'Son of Abraham and Keturah.'});
+    link('abraham',id);link('keturah',id);
+  });
+  link('abraham','isaac');link('abraham','ishmael');
+  link('sarah','isaac');link('hagar','ishmael');
+  sibs(['isaac','ishmael','zimran','jokshan','medan','midian','ishbak','shuah']);
+
+  /* ---------- F. Isaac's family ---------- */
+  add({id:'rebekah',name:'Rebekah',gender:'female',gen:21,refs:'Genesis 24; 25:19–26',bio:'Wife of Isaac; mother of the twins Esau and Jacob.'});
+  marry('isaac','rebekah');
+  add({id:'esau',name:'Esau',gender:'male',gen:22,refs:'Genesis 25:21–34; 27',bio:'Twin brother of Jacob; sold his birthright and was known as Edom, ancestor of the Edomites.'});
+  add({id:'jacob',name:'Jacob (Israel)',gender:'male',gen:22,mainLine:true,refs:'Genesis 25:21–34; 28; 32:28',bio:'Twin brother of Esau; renamed Israel. Father of the twelve tribes through Leah, Rachel, Bilhah, and Zilpah.'});
+  link('isaac','esau');link('isaac','jacob');
+  link('rebekah','esau');link('rebekah','jacob');
+  sibs(['esau','jacob']);
+
+  /* ---------- G. Jacob's family ---------- */
+  add({id:'leah',name:'Leah',gender:'female',gen:22,refs:'Genesis 29:16–35',bio:'Wife of Jacob; mother of Reuben, Simeon, Levi, Judah, Issachar, Zebulun, and Dinah.'});
+  add({id:'rachel',name:'Rachel',gender:'female',gen:22,refs:'Genesis 29:16–30; 30:22–24',bio:'Beloved wife of Jacob; mother of Joseph and Benjamin.'});
+  add({id:'bilhah',name:'Bilhah',gender:'female',gen:22,refs:'Genesis 30:3–8',bio:'Rachel\'s servant; mother of Dan and Naphtali.'});
+  add({id:'zilpah',name:'Zilpah',gender:'female',gen:22,refs:'Genesis 30:9–13',bio:'Leah\'s servant; mother of Gad and Asher.'});
+  marry('jacob','leah');marry('jacob','rachel');marry('jacob','bilhah');marry('jacob','zilpah');
+
+  const jacobSons = {
+    leah:['reuben','simeon','levi','judah','issachar','zebulun'],
+    rachel:['joseph','benjamin'],
+    bilhah:['dan','naphtali'],
+    zilpah:['gad','asher']
+  };
+  const sonNames = {reuben:'Reuben',simeon:'Simeon',levi:'Levi',judah:'Judah',issachar:'Issachar',zebulun:'Zebulun',joseph:'Joseph',benjamin:'Benjamin',dan:'Dan',naphtali:'Naphtali',gad:'Gad',asher:'Asher'};
+  const sonBios = {
+    reuben:'Firstborn of Jacob; lost the birthright through his actions.',
+    simeon:'Son of Jacob; ancestor of the Simeonite tribe.',
+    levi:'Son of Jacob; ancestor of the priestly Levites.',
+    judah:'Son of Jacob; his line leads to King David and to Jesus Christ (Matthew 1:2–3).',
+    issachar:'Son of Jacob; ancestor of the tribe of Issachar.',
+    zebulun:'Son of Jacob; ancestor of the tribe of Zebulun.',
+    joseph:'Son of Rachel; sold into Egypt, became ruler under Pharaoh, and preserved his family.',
+    benjamin:'Son of Rachel; ancestor of the tribe of Benjamin.',
+    dan:'Son of Bilhah; ancestor of the tribe of Dan.',
+    naphtali:'Son of Bilhah; ancestor of the tribe of Naphtali.',
+    gad:'Son of Zilpah; ancestor of the tribe of Gad.',
+    asher:'Son of Zilpah; ancestor of the tribe of Asher.'
+  };
+  const allSons = [];
+  for(const mom in jacobSons){
+    jacobSons[mom].forEach(id => {
+      add({id,name:sonNames[id],gender:'male',gen:23,mainLine:id==='judah',refs:'Genesis 29–30; 35; 49',
+           bio:sonBios[id]});
+      link('jacob',id);link(mom,id);
+      allSons.push(id);
+    });
+  }
+  sibs(allSons);
+
+  /* ---------- H. Judah's family ---------- */
+  add({id:'tamar',name:'Tamar',gender:'female',gen:23,refs:'Genesis 38',bio:'Daughter-in-law of Judah who bore Perez and Zerah; named in Matthew\'s genealogy of Jesus.'});
+  marry('judah','tamar');
+  add({id:'perez',name:'Perez',gender:'male',gen:24,mainLine:true,refs:'Genesis 38:29–30; Matthew 1:3',bio:'Twin son of Judah and Tamar; ancestor of David and Jesus.'});
+  add({id:'zerah',name:'Zerah',gender:'male',gen:24,refs:'Genesis 38:30',bio:'Twin brother of Perez; ancestor of the Zerahites.'});
+  link('judah','perez');link('judah','zerah');
+  link('tamar','perez');link('tamar','zerah');
+  sibs(['perez','zerah']);
+
+  /* ---------- I. Perez → David ---------- */
+  const perezLine = ['hezron','ram','amminadab','nahshon','salmon','boaz','obed','jesse','david'];
+  const perezNames = ['Hezron','Ram','Amminadab','Nahshon','Salmon','Boaz','Obed','Jesse','David'];
+  const perezRefs = ['Ruth 4:18','Ruth 4:19; Matthew 1:4','Ruth 4:19','Ruth 4:20','Ruth 4:20–21; Matthew 1:5','Ruth 4:21; Matthew 1:5','Ruth 4:22','Ruth 4:22','1 Samuel 16; Ruth 4:22; Matthew 1:6'];
+  const perezBios = [
+    'Son of Perez; father of Ram.',
+    'Son of Hezron; ancestor of David.',
+    'Son of Ram; father of Nahshon.',
+    'Prince of the tribe of Judah in the wilderness.',
+    'Son of Nahshon; husband of Rahab, father of Boaz.',
+    'Husband of Ruth; father of Obed; ancestor of David.',
+    'Son of Boaz and Ruth; grandfather of Jesse.',
+    'Father of David; of Bethlehem.',
+    'Shepherd, psalmist, king of Israel; his line is the royal line of Jesus Christ.'
+  ];
+  prev = 'perez';
+  perezLine.forEach((id,i) => {
+    add({id,name:perezNames[i],gender:'male',gen:25+i,mainLine:true,refs:perezRefs[i],bio:perezBios[i]});
+    link(prev,id); prev = id;
+  });
+  add({id:'rahab',name:'Rahab',gender:'female',gen:25,refs:'Joshua 2; Matthew 1:5',bio:'Woman of Jericho who sheltered Israel\'s spies and was spared. Named in Matthew\'s genealogy as mother of Boaz.'});
+  add({id:'ruth',name:'Ruth',gender:'female',gen:26,refs:'Ruth 1–4; Matthew 1:5',bio:'Moabite widow who pledged herself to Naomi and to Israel\'s God; wife of Boaz, mother of Obed.'});
+  marry('salmon','rahab');marry('boaz','ruth');
+
+  /* ---------- J. David's family ---------- */
+  add({id:'bathsheba',name:'Bathsheba',gender:'female',gen:26,refs:'2 Samuel 11–12',bio:'Wife of David; mother of Solomon.'});
+  add({id:'maacah',name:'Maacah',gender:'female',gen:26,refs:'2 Samuel 3:3',bio:'Wife of David; mother of Absalom.'});
+  add({id:'ahinoam',name:'Ahinoam',gender:'female',gen:26,refs:'1 Samuel 25:43',bio:'Wife of David; mother of Amnon.'});
+  marry('david','bathsheba');marry('david','maacah');marry('david','ahinoam');
+
+  add({id:'amnon',name:'Amnon',gender:'male',gen:27,refs:'2 Samuel 13',bio:'Firstborn of David; killed by Absalom.'});
+  add({id:'absalom',name:'Absalom',gender:'male',gen:27,refs:'2 Samuel 13–18',bio:'Son of David; rebelled against his father.'});
+  add({id:'solomon',name:'Solomon',gender:'male',gen:27,refs:'1 Kings 1–11; Matthew 1:6',bio:'Son of David and Bathsheba; king of Israel, builder of the Temple. His line is traced in Matthew\'s genealogy.'});
+  add({id:'nathan_son',name:'Nathan',gender:'male',gen:27,refs:'2 Samuel 5:14; Luke 3:31',bio:'Son of David; ancestor of Jesus according to Luke\'s genealogy.'});
+  link('david','amnon');link('david','absalom');link('david','solomon');link('david','nathan_son');
+  link('ahinoam','amnon');link('maacah','absalom');link('bathsheba','solomon');
+  sibs(['amnon','absalom','solomon','nathan_son']);
+
+  /* ---------- K. Matthew line (royal, through Solomon) ---------- */
+  const matthewLine = ['rehoboam','abijah','asa','jehoshaphat','joram','uzziah','jotham','ahaz','hezekiah','manasseh','amon','josiah','jeconiah','shealtiel_mt','zerubbabel_mt','abiud','eliakim','azor','zadok','achim','eliud','eleazar','matthan','jacob_mt','joseph'];
+  const matthewNames = ['Rehoboam','Abijah','Asa','Jehoshaphat','Joram','Uzziah','Jotham','Ahaz','Hezekiah','Manasseh','Amon','Josiah','Jeconiah','Shealtiel','Zerubbabel','Abiud','Eliakim','Azor','Zadok','Achim','Eliud','Eleazar','Matthan','Jacob','Joseph'];
+  const matthewRefs = 'Matthew 1:7–16';
+  prev = 'solomon';
+  matthewLine.forEach((id,i) => {
+    add({id,name:matthewNames[i],gender:'male',gen:28+i,mainLine:true,refs:matthewRefs,
+         bio:'Recorded in Matthew\'s royal genealogy of Jesus (Matthew 1:1–17).'});
+    link(prev,id); prev = id;
+  });
+  // Exile note
+  P['jeconiah'].bio += ' His generation marks the Babylonian exile in Matthew\'s genealogy.';
+
+  /* ---------- L. Luke line (through Nathan) ---------- */
+  const lukeLine = ['mattatha','menna','melea','eliakim_lk','jonam','joseph_lk1','judah_lk','simeon_lk','levi_lk','matthat_lk','jorim','eliezer','joshua_lk','er_lk','elmodam','cosam','addi','melchi','neri','shealtiel_lk','zerubbabel_lk','rhesa','joanna','judah_lk2','joseph_lk2','semei','mattathias','maath','naggai','esli','nahum','amos','mattathias2','joseph_lk3','jannai','melchi2','levi_lk2','matthat2','heli','joseph_lk4'];
+  prev = 'nathan_son';
+  lukeLine.forEach((id,i) => {
+    add({id,name:id.replace(/_lk\d?|_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()),gender:'male',gen:28+i,refs:'Luke 3:23–38',
+         bio:'Recorded in Luke\'s genealogy tracing Jesus back through Nathan to Adam.'});
+    link(prev,id); prev = id;
+  });
+
+  /* ---------- M. Jesus ---------- */
+  add({id:'mary',name:'Mary',gender:'female',gen:55,refs:'Luke 1:26–38; Matthew 1:18–25',bio:'Mother of Jesus; chosen by God to bear the Messiah through the Holy Spirit.'});
+  marry('joseph','mary');
+  add({id:'jesus',name:'Jesus Christ',gender:'male',gen:56,special:true,mainLine:true,
+       refs:'Matthew 1:1–17; Luke 3:23–38; John 1:1–14',
+       bio:'The Messiah, the Savior of the world. Conceived by the Holy Spirit, born of Mary, with Joseph as His legal/earthly father. Both Matthew\'s royal line (through Solomon) and Luke\'s line (through Nathan) converge on Him.'});
+  link('mary','jesus');
+  link('joseph','jesus'); // legal father
+
+  /* ---------- Auto-compute sibling lists (fill gaps) ---------- */
+  Object.values(P).forEach(p => {
+    if(!p.siblings) p.siblings = [];
+  });
+  // Ensure every child knows their parents' other children as siblings
+  Object.values(P).forEach(p => {
+    if(p.children && p.children.length){
+      p.children.forEach(c => {
+        const others = p.children.filter(x => x !== c);
+        others.forEach(o => {
+          if(!P[c].siblings.includes(o)) P[c].siblings.push(o);
+          if(!P[o].siblings.includes(c)) P[o].siblings.push(c);
+        });
+      });
+    }
+  });
+
+  /* Amharic names from the Amharic Bible (Bible Society of Ethiopia).
+     Matthew 1 and Luke 3:23–38 are the 1962 text. Genesis 29–30, 35, 38
+     and 2 Samuel 3, 5, and 11 are the same Bible. Genesis 25 names
+     (Sarah, Hagar, Keturah and her sons, Ishmael, Rebekah, Esau) are
+     the New Amharic Standard Version. Unnamed people get a description,
+     not an invented personal name. */
+  const AM = {
+    adam:'አዳም', eve:'ሔዋን', cain:'ቃየን', abel:'አቤል', seth:'ሴት',
+    other_adam:'ሌሎች ወንዶችና ሴቶች',
+    enosh:'ሄኖስ', kenan:'ቃይናን', mahalalel:'መላልኤል', jared:'ያሬድ',
+    enoch:'ሄኖክ', methuselah:'ማቱሳላ', lamech:'ላሜህ', noah:'ኖኅ',
+    wife_enosh:'የሄኖስ ሚስት', wife_lamech:'የላሜህ ሚስት', wife_noah:'የኖኅ ሚስት',
+    shem:'ሴም', ham:'ካም', japheth:'ያፌት',
+    arphaxad:'አርፋክስድ', shelah:'ሳላ', eber:'አቤር', peleg:'ፋሌቅ',
+    reu:'ራጋው', serug:'ሴሮህ', nahor:'ናኮር', terah:'ታራ', abraham:'አብርሃም',
+    note_cainan:'ቃይንም (ሉቃስ 3፥36)',
+    sarah:'ሣራ', hagar:'አጋር', keturah:'ኬጡራ',
+    isaac:'ይስሐቅ', ishmael:'እስማኤል',
+    zimran:'ዘምራን', jokshan:'ዮቅሳን', medan:'ሜዳን', midian:'ምድያም', ishbak:'የስቦቅ', shuah:'ስዌሕ',
+    rebekah:'ርብቃ', esau:'ዔሳው', jacob:'ያዕቆብ (እስራኤል)',
+    leah:'ልያ', rachel:'ራሔል', bilhah:'ባላ', zilpah:'ዘለፋ',
+    reuben:'ሮቤል', simeon:'ስምዖን', levi:'ሌዊ', judah:'ይሁዳ',
+    issachar:'ይሳኮር', zebulun:'ዛብሎን', joseph:'ዮሴፍ', benjamin:'ብንያም',
+    dan:'ዳን', naphtali:'ንፍታሌም', gad:'ጋድ', asher:'አሴር',
+    tamar:'ትዕማር', perez:'ፋሬስ', zerah:'ዛራ',
+    hezron:'ኤስሮም', ram:'አራም', amminadab:'አሚናዳብ', nahshon:'ነአሶን',
+    salmon:'ሰልሞን', boaz:'ቦኤዝ', obed:'ኢዮቤድ', jesse:'እሴይ', david:'ዳዊት',
+    rahab:'ራኬብ', ruth:'ሩት',
+    bathsheba:'ቤርሳቤህ', maacah:'መዓካ', ahinoam:'አኪናሆም',
+    amnon:'አምኖን', absalom:'አቤሴሎም', solomon:'ሰሎሞን', nathan_son:'ናታን',
+    rehoboam:'ሮብዓም', abijah:'አቢያ', asa:'አሣፍ', jehoshaphat:'ኢዮሣፍጥ',
+    joram:'ኢዮራም', uzziah:'ዖዝያን', jotham:'ኢዮአታም', ahaz:'አካዝ',
+    hezekiah:'ሕዝቅያስ', manasseh:'ምናሴ', amon:'አሞፅ', josiah:'ኢዮስያስ',
+    jeconiah:'ኢኮንያን', shealtiel_mt:'ሰላትያል', zerubbabel_mt:'ዘሩባቤል',
+    abiud:'አብዩድ', eliakim:'ኤልያቄም', azor:'አዛር', zadok:'ሳዶቅ',
+    achim:'አኪም', eliud:'ኤልዩድ', eleazar:'አልዓዛር', matthan:'ማታን',
+    jacob_mt:'ያዕቆብ', joseph:'ዮሴፍ',
+    mattatha:'ማጣት', menna:'ማይናን', melea:'ሜልያ', eliakim_lk:'ኤልያቄም',
+    jonam:'ዮናን', joseph_lk1:'ዮሴፍ', judah_lk:'ይሁዳ', simeon_lk:'ስምዖን',
+    levi_lk:'ሌዊ', matthat_lk:'ማጣት', jorim:'ዮራም', eliezer:'ኤልዓዘር',
+    joshua_lk:'ዮሴዕ', er_lk:'ኤር', elmodam:'ኤልሞዳም', cosam:'ቆሳም',
+    addi:'ሐዲ', melchi:'ሚልኪ', neri:'ኔሪ', shealtiel_lk:'ሰላትያል',
+    zerubbabel_lk:'ዘሩባቤል', rhesa:'ሬስ', joanna:'ዮናን', judah_lk2:'ዮዳ',
+    joseph_lk2:'ዮሴፍ', semei:'ሴሜይ', mattathias:'ማታትዩ', maath:'ማአት',
+    naggai:'ናጌ', esli:'ኤሲሊም', nahum:'ናሆም', amos:'አሞጽ',
+    mattathias2:'ማታትዩ', joseph_lk3:'ዮሴፍ', jannai:'ዮና', melchi2:'ሚልኪ',
+    levi_lk2:'ሌዊ', matthat2:'ማቲ', heli:'ኤሊ', joseph_lk4:'ዮሴፍ',
+    mary:'ማርያም', jesus:'ኢየሱስ ክርስቶስ'
+  };
+  Object.values(P).forEach(p => {
+    if(!AM[p.id]) throw new Error('Missing Amharic Bible name for ' + p.id);
+    p.am = AM[p.id];
+  });
+
+  return P;
+})();
+
+/* Names: English stays the default. አማርኛ uses the Bible spelling in p.am. */
+const Lang = {
+  code: 'en',
+  name(p){
+    if(!p) return '';
+    return this.code === 'am' && p.am ? p.am : p.name;
+  },
+  other(p){
+    if(!p) return '';
+    return this.code === 'am' ? p.name : (p.am || '');
+  },
+  initials(p){
+    return (p.name || '').replace(/[^A-Za-z ]/g,'').split(' ').map(w => w[0]).filter(Boolean).slice(0, 2).join('') || '✝';
+  }
+};
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, ch => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[ch]));
+}
+
+/* ============================================================
+   MODULE 2 — LAYOUT ENGINE
+   Simple recursive tree layout with marriage grouping.
+   Each "family unit" = [person + spouse] → children row.
+   ============================================================ */
+const Layout = (() => {
+  const NODE_W = 170, NODE_H = 150, GAP_X = 34, GAP_Y = 70;
+  const positions = {};        // id -> {x,y}
+  const familyUnits = [];      // {parentIds:[], childIds:[]}
+  let cursorX = 0;
+  let maxY = 0;
+
+  function build(){
+    positions.length = 0;
+    Object.keys(positions).forEach(k=>delete positions[k]);
+    familyUnits.length = 0;
+    cursorX = 0; maxY = 0;
+
+    // Root: Adam & Eve
+    layoutUnit(['adam','eve'], 1, 0);
+
+    // Compute canvas bounds
+    let minX=Infinity,maxX=-Infinity;
+    Object.values(positions).forEach(p=>{minX=Math.min(minX,p.x);maxX=Math.max(maxX,p.x);});
+    const width = (maxX-minX) + NODE_W + 200;
+    const height = maxY + NODE_H + 200;
+    const offset = 200 - minX;
+    // shift all
+    Object.values(positions).forEach(p=>p.x += offset);
+    return {width,height};
+  }
+
+  function layoutUnit(parentIds, gen, y){
+    // Place parents side by side
+    const parentPositions = [];
+    const unitWidth = parentIds.length * (NODE_W + 10) - 10;
+    const startX = cursorX;
+    parentIds.forEach((id,i) => {
+      const x = startX + i * (NODE_W + 10);
+      positions[id] = {x, y, gen};
+      parentPositions.push({id,x});
+    });
+    const centerX = startX + unitWidth/2;
+    cursorX = startX + unitWidth + GAP_X;
+
+    // Find children of this couple
+    // Children = intersection of both parents' children (if both), else union of children of the primary parent
+    let childIds = [];
+    if(parentIds.length === 2){
+      const a = DATA[parentIds[0]], b = DATA[parentIds[1]];
+      childIds = a.children.filter(c => b.children.includes(c) || DATA[c].father === a.id || DATA[c].mother === b.id);
+      if(childIds.length === 0) childIds = [...new Set([...a.children, ...b.children])];
+    } else {
+      childIds = [...(DATA[parentIds[0]].children||[])];
+    }
+    // Filter out children that are themselves spouses placed elsewhere
+    childIds = childIds.filter(id => DATA[id] && !positions[id]);
+
+    if(childIds.length === 0) return;
+
+    // Separate into families for children who themselves have spouses (next gen units)
+    // For simplicity: place children in a row beneath, then recurse each child+spouse
+    const childY = y + NODE_H + GAP_Y;
+    maxY = Math.max(maxY, childY + NODE_H);
+
+    const groupStartX = cursorX - unitWidth - GAP_X; // start at parent start
+    let childCursor = groupStartX;
+    const childPositions = [];
+
+    childIds.forEach((id) => {
+      const person = DATA[id];
+      const spouseIds = (person.spouses||[]).filter(sid => !positions[sid] && !childIds.includes(sid));
+      const unitMembers = [id, ...spouseIds];
+      const w = unitMembers.length * (NODE_W + 8) - 8;
+      const cx = childCursor;
+      unitMembers.forEach((mid, mi) => {
+        positions[mid] = {x: cx + mi*(NODE_W+8), y: childY, gen};
+        childPositions.push({id:mid, x:cx+mi*(NODE_W+8)});
+      });
+      familyUnits.push({parentIds:[...parentIds], childIds:[id]});
+      childCursor += w + GAP_X;
+
+      // Recurse into this child's own family (if has children)
+      const childHasChildren = (person.children||[]).length > 0;
+      if(childHasChildren){
+        // Save outer cursor, recurse
+        const savedCursor = cursorX;
+        cursorX = cx;
+        layoutUnit(unitMembers, gen+1, childY);
+        cursorX = Math.max(cursorX, savedCursor);
+      }
+    });
+
+    // If no children were placed at this level (all spouses), that's fine
+    // Draw parent-child connectors info handled in render via familyUnits + positions
+  }
+
+  return { build, get positions(){return positions}, get familyUnits(){return familyUnits} };
+})();
+
+/* ============================================================
+   MODULE 3 — RENDER
+   "Show all at once" fits the whole tree.
+   "Step by step" opens one generation at a time and glides the view to it.
+   ============================================================ */
+const Render = (() => {
+  const viewport = document.getElementById('viewport');
+  const canvas = document.getElementById('canvas');
+  const connectors = document.getElementById('connectors');
+  let scale = 0.55, tx = 0, ty = 0;
+  let mode = 'explore';
+  const expanded = new Set();
+  let followTimer = 0;
+  let glowTimer = 0;
+
+  function cardSize(id){
+    const el = id && canvas.querySelector('.person[data-id="' + CSS.escape(id) + '"]');
+    if(el && el.style.display !== 'none' && el.offsetHeight){
+      return { w: el.offsetWidth, h: el.offsetHeight };
+    }
+    const p = DATA[id];
+    return { w: p && p.special ? 200 : 170, h: 198 };
+  }
+
+  function fitSection(){
+    const header = document.querySelector('header');
+    const tree = document.getElementById('tree');
+    if(!header || !tree) return;
+    const h = Math.max(360, window.innerHeight - Math.ceil(header.getBoundingClientRect().height));
+    tree.style.height = h + 'px';
+  }
+
+  function ancestorChain(id){
+    const chain = [];
+    const guard = new Set();
+    let cur = id;
+    while(cur && DATA[cur] && !guard.has(cur)){
+      guard.add(cur);
+      chain.unshift(cur);
+      const person = DATA[cur];
+      let parent = person.father || person.mother || null;
+      if(!parent){
+        parent = Object.keys(DATA).find(pid => (DATA[pid].children || []).includes(cur)) || null;
+      }
+      cur = parent;
+    }
+    return chain;
+  }
+
+  function visibleSet(){
+    if(mode === 'all') return new Set(Object.keys(DATA));
+    const visible = new Set(['adam', 'eve']);
+    const queue = ['adam', 'eve'];
+    let i = 0;
+    while(i < queue.length){
+      const id = queue[i++];
+      const p = DATA[id];
+      if(!p) continue;
+      (p.spouses || []).forEach(s => {
+        if(DATA[s] && !visible.has(s)){
+          visible.add(s);
+          queue.push(s);
+        }
+      });
+      if(expanded.has(id)){
+        (p.children || []).forEach(c => {
+          if(DATA[c] && !visible.has(c)){
+            visible.add(c);
+            queue.push(c);
+          }
+        });
+      }
+    }
+    return visible;
+  }
+
+  function clusterIds(ids){
+    const placed = [];
+    const seen = new Set();
+    (ids || []).forEach(id => {
+      if(!id || seen.has(id) || !Layout.positions[id]) return;
+      seen.add(id);
+      placed.push(id);
+    });
+    if(placed.length < 2) return placed;
+    let minY = Infinity, maxY = -Infinity;
+    placed.forEach(id => {
+      const y = Layout.positions[id].y;
+      minY = Math.min(minY, y);
+      maxY = Math.max(maxY, y);
+    });
+    if(maxY - minY < 800) return placed;
+    const cluster = placed.filter(id => Layout.positions[id].y >= maxY - 420);
+    return cluster.length ? cluster : placed;
+  }
+
+  function familyFocusIds(id){
+    const p = DATA[id];
+    if(!p) return [];
+    const ids = [id, ...(p.spouses || [])];
+    (p.children || []).forEach(c => {
+      if(!DATA[c]) return;
+      ids.push(c);
+      (DATA[c].spouses || []).forEach(s => ids.push(s));
+    });
+    return ids;
+  }
+
+  function nextInLine(id){
+    const kids = ((DATA[id] && DATA[id].children) || []).filter(c => DATA[c]);
+    if(!kids.length) return null;
+    return kids.find(c => DATA[c].mainLine)
+      || kids.find(c => (DATA[c].children || []).length)
+      || kids[0];
+  }
+
+  function setStatus(text){
+    const el = document.getElementById('modeStatus');
+    if(el) el.textContent = text;
+  }
+
+  function setModeUI(){
+    const exploreBtn = document.getElementById('modeExplore');
+    const allBtn = document.getElementById('modeAll');
+    const expandBtn = document.getElementById('expandAll');
+    const collapseBtn = document.getElementById('collapseAll');
+    if(exploreBtn) exploreBtn.classList.toggle('active', mode === 'explore');
+    if(allBtn) allBtn.classList.toggle('active', mode === 'all');
+    if(expandBtn) expandBtn.classList.toggle('active', mode === 'all');
+    if(collapseBtn) collapseBtn.classList.toggle('active', mode === 'explore');
+  }
+
+  function roleLabel(p){
+    if(p.special) return 'Messiah';
+    if(p.gender === 'female') return 'Woman';
+    if(p.gender === 'mixed') return 'Family';
+    return 'Man';
+  }
+
+  function makeCard(p, pos){
+    const el = document.createElement('div');
+    el.className = 'person'
+      + (p.gender === 'female' ? ' female' : '')
+      + (p.mainLine ? ' main-line' : '')
+      + (p.special ? ' special' : '');
+    el.dataset.id = p.id;
+    el.style.left = pos.x + 'px';
+    el.style.top = pos.y + 'px';
+    const initials = Lang.initials(p);
+    const hasKids = (p.children || []).length > 0;
+    el.innerHTML = `
+      <div class="avatar">${initials}</div>
+      <div class="name" title="${escapeHtml(Lang.other(p))}">${escapeHtml(Lang.name(p))}</div>
+      <div class="role">${roleLabel(p)}</div>
+      ${p.gen ? `<div class="gen">Generation ${p.gen}</div>` : ''}
+      ${hasKids ? '<button type="button" class="toggle"></button>' : ''}
+    `;
+    el.addEventListener('click', (e) => {
+      if(e.target.closest('.toggle')){
+        e.stopPropagation();
+        onToggle(p.id);
+        return;
+      }
+      Interactions.select(p.id);
+    });
+    return el;
+  }
+
+  function renderAll(){
+    [...canvas.querySelectorAll('.person')].forEach(n => n.remove());
+    const pos = Layout.positions;
+    Object.values(DATA).forEach(p => {
+      const at = pos[p.id];
+      if(!at) return;
+      canvas.appendChild(makeCard(p, at));
+    });
+  }
+
+  function applyVisibility(highlightIds){
+    const visible = visibleSet();
+    const highlight = highlightIds || new Set();
+    canvas.querySelectorAll('.person').forEach(el => {
+      const id = el.dataset.id;
+      el.style.display = visible.has(id) ? '' : 'none';
+      const btn = el.querySelector('.toggle');
+      if(btn){
+        if(mode === 'all'){
+          btn.textContent = 'Follow ↓';
+          btn.title = 'Move the view to the descendants';
+        } else if(expanded.has(id)){
+          btn.textContent = '− Collapse';
+          btn.title = 'Fold this branch and bring the view back';
+        } else {
+          btn.textContent = 'Expand ↓';
+          btn.title = 'Open the next generation. The view follows.';
+        }
+      }
+      if(visible.has(id) && highlight.has(id)){
+        el.classList.remove('just-in');
+        void el.offsetWidth;
+        el.classList.add('just-in');
+      } else {
+        el.classList.remove('just-in');
+      }
+    });
+    clearTimeout(glowTimer);
+    glowTimer = setTimeout(() => {
+      canvas.querySelectorAll('.person.just-in').forEach(el => el.classList.remove('just-in'));
+    }, 1700);
+    drawConnectors(visible);
+    return visible;
+  }
+
+  function drawConnectors(visible){
+    const pos = Layout.positions;
+    const shown = (id) => !!(id && visible.has(id) && pos[id]);
+    connectors.innerHTML = '';
+    const paths = [];
+
+    Object.values(DATA).forEach(p => {
+      if(p.gender !== 'male' || !shown(p.id)) return;
+      (p.spouses || []).forEach(sid => {
+        if(!shown(sid)) return;
+        const a = pos[p.id], b = pos[sid];
+        const x1 = a.x + cardSize(p.id).w;
+        const x2 = b.x;
+        paths.push({ d:`M ${x1} ${a.y + 70} L ${x2} ${b.y + 70}`, cls:'marriage' });
+      });
+    });
+
+    Object.values(DATA).forEach(p => {
+      if(!shown(p.id)) return;
+      (p.children || []).forEach(cid => {
+        const child = DATA[cid];
+        if(!child || !shown(cid)) return;
+        const primary = child.father || child.mother;
+        if(primary !== p.id) return;
+        const a = pos[p.id], b = pos[cid];
+        const px = a.x + cardSize(p.id).w / 2;
+        const py = a.y + 150;
+        const cx = b.x + cardSize(cid).w / 2;
+        const cy = b.y;
+        const midY = py + (cy - py) / 2;
+        const isMain = p.mainLine && child.mainLine;
+        paths.push({
+          d:`M ${px} ${py} L ${px} ${midY} L ${cx} ${midY} L ${cx} ${cy}`,
+          cls: isMain ? 'main' : 'sibling'
+        });
+      });
+    });
+
+    Object.values(DATA).forEach(p => {
+      if(!p.siblings || !p.siblings.length || !shown(p.id)) return;
+      const a = pos[p.id];
+      p.siblings.forEach(sid => {
+        if(p.id > sid || !shown(sid)) return;
+        const b = pos[sid];
+        if(Math.abs(a.y - b.y) > 5) return;
+        const x1 = a.x + cardSize(p.id).w;
+        paths.push({ d:`M ${x1} ${a.y + 100} L ${b.x} ${b.y + 100}`, cls:'sibling' });
+      });
+    });
+
+    paths.forEach(({ d, cls }) => {
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', d);
+      path.setAttribute('class', cls);
+      connectors.appendChild(path);
+      try {
+        path.style.setProperty('--len', path.getTotalLength());
+        path.classList.add('draw');
+      } catch(e){}
+    });
+  }
+
+  function ensureTreeInView(){
+    const r = viewport.getBoundingClientRect();
+    if(r.top > 110 || r.bottom < window.innerHeight * 0.45){
+      document.getElementById('tree').scrollIntoView({ behavior:'smooth', block:'start' });
+    }
+  }
+
+  function applyTransform(animate){
+    if(!animate){
+      canvas.classList.add('no-anim');
+      canvas.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`;
+      return;
+    }
+    if(canvas.classList.contains('no-anim')){
+      canvas.classList.remove('no-anim');
+      void canvas.offsetWidth;
+    }
+    canvas.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`;
+    viewport.classList.add('following');
+    clearTimeout(followTimer);
+    followTimer = setTimeout(() => viewport.classList.remove('following'), 950);
+  }
+
+  function focusNodes(ids, pad, limits, animate){
+    if(pad === undefined) pad = 70;
+    limits = limits || {};
+    if(animate === undefined) animate = true;
+    const visible = visibleSet();
+    const use = [];
+    const seen = new Set();
+    (ids || []).forEach(id => {
+      if(!id || seen.has(id) || !visible.has(id) || !Layout.positions[id]) return;
+      seen.add(id);
+      use.push(id);
+    });
+    if(!use.length) return;
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    use.forEach(id => {
+      const p = Layout.positions[id];
+      const sz = cardSize(id);
+      minX = Math.min(minX, p.x);
+      minY = Math.min(minY, p.y);
+      maxX = Math.max(maxX, p.x + sz.w);
+      maxY = Math.max(maxY, p.y + sz.h);
+    });
+    const panel = document.getElementById('profilePanel');
+    const panelW = panel && panel.classList.contains('open') ? panel.getBoundingClientRect().width : 0;
+    const vw = Math.max(viewport.clientWidth, 320);
+    const vh = Math.max(viewport.clientHeight, 320);
+    const viewRect = viewport.getBoundingClientRect();
+    const bar = document.getElementById('modeBar').getBoundingClientRect();
+    let topUi = 18;
+    let bottomUi = 20;
+    if(bar.width){
+      if(bar.top - viewRect.top < viewRect.height * 0.55){
+        topUi = Math.max(topUi, bar.bottom - viewRect.top + 16);
+      } else {
+        bottomUi = Math.max(bottomUi, viewRect.bottom - bar.top + 16);
+      }
+    }
+    if(document.getElementById('journeyBar').classList.contains('active')){
+      const jr = document.getElementById('journeyBar').getBoundingClientRect();
+      bottomUi = Math.max(bottomUi, viewRect.bottom - jr.top + 14);
+    }
+    const usableW = Math.max(180, vw - panelW - pad * 2);
+    const usableH = Math.max(180, vh - topUi - bottomUi);
+    const bw = Math.max(48, maxX - minX);
+    const bh = Math.max(48, maxY - minY);
+    const fit = Math.min(usableW / bw, usableH / bh);
+    const minScale = limits.minScale !== undefined ? limits.minScale : 0.28;
+    const maxScale = limits.maxScale !== undefined ? limits.maxScale : 1.05;
+    scale = Math.max(minScale, Math.min(maxScale, fit));
+    const cx = (minX + maxX) / 2;
+    const cy = (minY + maxY) / 2;
+    tx = (vw - panelW) / 2 - cx * scale;
+    ty = topUi + usableH / 2 - cy * scale;
+    applyTransform(animate);
+    if(animate) ensureTreeInView();
+  }
+
+  function centerOn(id){
+    if(!DATA[id]) return;
+    focusNodes([id, ...(DATA[id].spouses || [])], 84, { minScale:0.5, maxScale:1.05 });
+  }
+
+  function zoom(factor, mx, my){
+    const old = scale;
+    scale = Math.max(0.012, Math.min(2.2, scale * factor));
+    if(mx === undefined){
+      mx = viewport.clientWidth / 2;
+      my = viewport.clientHeight / 2;
+    }
+    tx = mx - (mx - tx) * (scale / old);
+    ty = my - (my - ty) * (scale / old);
+    applyTransform(false);
+  }
+
+  function followDescendants(id){
+    const p = DATA[id];
+    if(!p) return;
+    const panel = document.getElementById('profilePanel');
+    if(panel) panel.classList.remove('open');
+    const kids = (p.children || []).filter(c => DATA[c]);
+    if(!kids.length){
+      centerOn(id);
+      setStatus(Lang.name(p) + ' has no further descendants in this tree.');
+      return;
+    }
+    if(mode === 'explore') expanded.add(id);
+    const fresh = new Set();
+    kids.forEach(c => {
+      fresh.add(c);
+      (DATA[c].spouses || []).forEach(s => fresh.add(s));
+    });
+    applyVisibility(fresh);
+    focusNodes(clusterIds(familyFocusIds(id)), 56, { minScale:0.22, maxScale:1 });
+    const preview = kids.slice(0, 3).map(c => Lang.name(DATA[c])).join(', ');
+    const extra = kids.length > 3 ? ' +' + (kids.length - 3) + ' more' : '';
+    setStatus(preview + extra + ' — the view followed this generation.');
+  }
+
+  function expand(id, opts){
+    opts = opts || {};
+    if(!DATA[id]) return;
+    if(opts.follow === false){
+      if((DATA[id].children || []).length) expanded.add(id);
+      applyVisibility();
+      return;
+    }
+    followDescendants(id);
+  }
+
+  function collapse(id, opts){
+    opts = opts || {};
+    const follow = opts.follow !== false;
+    if(!DATA[id]) return;
+    if(mode === 'all'){
+      mode = 'explore';
+      setModeUI();
+    }
+    const stack = [id];
+    const seen = new Set();
+    while(stack.length){
+      const cur = stack.pop();
+      if(seen.has(cur)) continue;
+      seen.add(cur);
+      expanded.delete(cur);
+      const p = DATA[cur];
+      if(p) (p.children || []).forEach(c => stack.push(c));
+    }
+    applyVisibility();
+    if(follow){
+      focusNodes([id, ...(DATA[id].spouses || [])], 80, { minScale:0.45, maxScale:1 });
+      setStatus(Lang.name(DATA[id]) + ' — branch folded, and the view returned here.');
+    }
+  }
+
+  function revealTo(id, opts){
+    opts = opts || {};
+    if(!DATA[id]) return;
+    const follow = opts.follow !== false;
+    if(mode === 'explore'){
+      let chain = ancestorChain(id);
+      if(chain.length <= 1){
+        const sp = (DATA[id].spouses || []).find(s => ancestorChain(s).length > 1);
+        if(sp) chain = ancestorChain(sp);
+      }
+      chain.forEach(cid => {
+        if(cid !== id && DATA[cid] && (DATA[cid].children || []).length) expanded.add(cid);
+      });
+    }
+    applyVisibility(new Set([id]));
+    if(follow){
+      const around = [id, ...(DATA[id].spouses || [])];
+      const parentId = DATA[id].father || DATA[id].mother;
+      if(parentId) around.push(parentId);
+      focusNodes(clusterIds(around), 80, { minScale:0.55, maxScale:1.05 });
+      setStatus(Lang.name(DATA[id]) + ' — brought into view.');
+    }
+  }
+
+  function showAll(){
+    mode = 'all';
+    Object.keys(DATA).forEach(id => {
+      if((DATA[id].children || []).length) expanded.add(id);
+    });
+    applyVisibility();
+    setModeUI();
+    focusNodes(Object.keys(Layout.positions), 20, { minScale:0.012, maxScale:0.55 });
+    setStatus('The whole tree is on screen. Drag to move, scroll to zoom, or press Follow.');
+  }
+
+  function explore(opts){
+    opts = opts || {};
+    const fromAll = mode !== 'explore';
+    const resetTree = opts.reset === true || fromAll;
+    mode = 'explore';
+    if(resetTree){
+      expanded.clear();
+      expanded.add('adam');
+      applyVisibility(new Set(['cain', 'abel', 'seth', 'other_adam']));
+      focusNodes(familyFocusIds('adam'), 64, { minScale:0.4, maxScale:0.95 });
+      setStatus('Step by step from Adam. Expand, and the view follows each generation.');
+    } else {
+      setStatus('Step by step. Expand, and the view follows each generation.');
+    }
+    setModeUI();
+  }
+
+  function stepNext(){
+    let id = Interactions.selected || 'adam';
+    const el = canvas.querySelector('.person[data-id="' + CSS.escape(id) + '"]');
+    if(!el || el.style.display === 'none') id = 'adam';
+    const p = DATA[id];
+    if(!p) return;
+    const child = nextInLine(id);
+    if(!child){
+      centerOn(id);
+      setStatus(Lang.name(p) + ' is the end of this line.');
+      return;
+    }
+    if(mode === 'explore') expanded.add(id);
+    const fresh = new Set();
+    (p.children || []).forEach(c => {
+      if(!DATA[c]) return;
+      fresh.add(c);
+      (DATA[c].spouses || []).forEach(s => fresh.add(s));
+    });
+    applyVisibility(fresh);
+    Interactions.select(child, { open:false });
+    focusNodes(clusterIds(familyFocusIds(id)), 56, { minScale:0.22, maxScale:1 });
+    setStatus(Lang.name(DATA[child]) + ' — the view followed this descendant.');
+  }
+
+  function stepPrev(){
+    const id = Interactions.selected || 'adam';
+    const p = DATA[id];
+    if(!p) return;
+    const parentId = p.father || p.mother;
+    if(!parentId || !DATA[parentId]){
+      Interactions.select('adam', { open:false });
+      focusNodes(familyFocusIds('adam'), 64, { minScale:0.4, maxScale:0.95 });
+      setStatus('You are at the beginning, with Adam.');
+      return;
+    }
+    if(mode === 'explore') collapse(parentId, { follow:false });
+    Interactions.select(parentId, { open:false });
+    const frame = [parentId, ...(DATA[parentId].spouses || []), ...(DATA[parentId].siblings || [])];
+    focusNodes(frame, 64, { minScale:0.34, maxScale:1 });
+    setStatus(Lang.name(DATA[parentId]) + ' — moved back one generation.');
+  }
+
+  function onToggle(id){
+    if(mode === 'all' || !expanded.has(id)) followDescendants(id);
+    else collapse(id);
+  }
+
+  function reset(){
+    if(mode === 'all'){
+      focusNodes(Object.keys(Layout.positions), 20, { minScale:0.012, maxScale:0.55 });
+      setStatus('Whole tree fitted to the screen.');
+      return;
+    }
+    focusNodes(familyFocusIds('adam'), 64, { minScale:0.4, maxScale:0.95 });
+    setStatus('Back at Adam. Expand, and the view follows.');
+  }
+
+  function fitCanvas(){
+    const pos = Layout.positions;
+    let maxX = 0, maxY = 0;
+    Object.keys(pos).forEach(id => {
+      const p = pos[id];
+      const sz = cardSize(id);
+      maxX = Math.max(maxX, p.x + sz.w);
+      maxY = Math.max(maxY, p.y + sz.h);
+    });
+    const width = maxX + 260;
+    const height = maxY + 260;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    connectors.setAttribute('width', width);
+    connectors.setAttribute('height', height);
+  }
+
+  function init(){
+    fitSection();
+    Layout.build();
+    fitCanvas();
+    mode = 'explore';
+    expanded.clear();
+    expanded.add('adam');
+    renderAll();
+    applyVisibility(new Set(['cain', 'abel', 'seth', 'other_adam']));
+    setModeUI();
+    focusNodes(familyFocusIds('adam'), 64, { minScale:0.4, maxScale:0.95 }, false);
+    setStatus('Step by step from Adam. Expand, and the view follows each generation.');
+    setupPanZoom();
+    let resizeTimer = 0;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        fitSection();
+        if(mode === 'all'){
+          focusNodes(Object.keys(Layout.positions), 20, { minScale:0.012, maxScale:0.55 }, false);
+        } else if(Interactions.selected && DATA[Interactions.selected]){
+          const id = Interactions.selected;
+          const ids = expanded.has(id) ? familyFocusIds(id) : [id, ...(DATA[id].spouses || [])];
+          focusNodes(ids, 64, { minScale:0.34, maxScale:0.95 }, false);
+        }
+      }, 140);
+    });
+    document.addEventListener('fullscreenchange', () => {
+      fitSection();
+      if(mode === 'all') reset();
+      else if(Interactions.selected) centerOn(Interactions.selected);
+    });
+  }
+
+  function setupPanZoom(){
+    let dragging = false, sx = 0, sy = 0, ox = 0, oy = 0;
+    viewport.addEventListener('mousedown', e => {
+      if(e.target.closest('.person')) return;
+      dragging = true;
+      sx = e.clientX; sy = e.clientY; ox = tx; oy = ty;
+      viewport.classList.add('dragging');
+    });
+    window.addEventListener('mousemove', e => {
+      if(!dragging) return;
+      tx = ox + (e.clientX - sx);
+      ty = oy + (e.clientY - sy);
+      applyTransform(false);
+    });
+    window.addEventListener('mouseup', () => {
+      dragging = false;
+      viewport.classList.remove('dragging');
+    });
+    viewport.addEventListener('wheel', e => {
+      e.preventDefault();
+      const rect = viewport.getBoundingClientRect();
+      zoom(e.deltaY < 0 ? 1.12 : 0.89, e.clientX - rect.left, e.clientY - rect.top);
+    }, { passive:false });
+
+    let lastDist = 0;
+    viewport.addEventListener('touchstart', e => {
+      if(e.touches.length === 1){
+        dragging = true;
+        sx = e.touches[0].clientX;
+        sy = e.touches[0].clientY;
+        ox = tx; oy = ty;
+      } else if(e.touches.length === 2){
+        lastDist = touchDist(e);
+      }
+    }, { passive:true });
+    viewport.addEventListener('touchmove', e => {
+      if(e.touches.length === 1 && dragging){
+        tx = ox + (e.touches[0].clientX - sx);
+        ty = oy + (e.touches[0].clientY - sy);
+        applyTransform(false);
+      } else if(e.touches.length === 2){
+        const d = touchDist(e);
+        if(lastDist) zoom(d / lastDist);
+        lastDist = d;
+      }
+    }, { passive:true });
+    viewport.addEventListener('touchend', () => {
+      dragging = false;
+      lastDist = 0;
+    });
+  }
+
+  function touchDist(e){
+    const a = e.touches[0], b = e.touches[1];
+    return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+  }
+
+  function relabel(){
+    canvas.querySelectorAll('.person').forEach(el => {
+      const p = DATA[el.dataset.id];
+      if(!p) return;
+      const nameEl = el.querySelector('.name');
+      if(!nameEl) return;
+      nameEl.textContent = Lang.name(p);
+      nameEl.title = Lang.other(p);
+    });
+  }
+
+  return {
+    init, expand, collapse, centerOn, zoom, reset, focusNodes,
+    showAll, explore, revealTo, stepNext, stepPrev, followDescendants, relabel,
+    expandAll: showAll,
+    collapseAll: () => explore({ reset:true }),
+    get scale(){ return scale; },
+    get expanded(){ return expanded; },
+    get mode(){ return mode; }
+  };
+})();
+
+
+/* ============================================================
+   MODULE 4 — INTERACTIONS (selection & profile panel)
+   ============================================================ */
+const Interactions = (() => {
+  const panel = document.getElementById('profilePanel');
+  let selected = null;
+
+  function select(id, opts){
+    opts = opts || {};
+    selected = id;
+    const p = DATA[id];
+    if(!p) return;
+    // Highlight card
+    document.querySelectorAll('.person.selected').forEach(n=>n.classList.remove('selected'));
+    const el = document.querySelector(`.person[data-id="${CSS.escape(id)}"]`);
+    if(el) el.classList.add('selected');
+
+    // Fill panel
+    document.getElementById('pAvatar').textContent = Lang.initials(p);
+    document.getElementById('pName').textContent = Lang.name(p);
+    document.getElementById('pName').title = Lang.other(p);
+    const kind = p.special ? 'Messiah' : p.gender==='female' ? 'Woman' : p.gender==='mixed' ? 'Family' : 'Man';
+    let sub = kind + (p.gen?` · Generation ${p.gen}`:'');
+    if(Lang.code === 'am' && p.wifeUnnamed) sub += ' · ስሟ በመጽሐፍ ቅዱስ አልተጻፈም';
+    if(Lang.code === 'am' && p.id === 'other_adam') sub += ' · ስማቸው በመጽሐፍ ቅዱስ አልተጻፈም';
+    document.getElementById('pSub').textContent = sub;
+    document.getElementById('pRefs').textContent = p.refs || '';
+    document.getElementById('pBio').textContent = p.bio || '';
+
+    const chip = (id2, cls) => {
+      const q = DATA[id2]; if(!q) return '';
+      return `<span class="chip ${cls}" data-id="${id2}" title="${escapeHtml(Lang.other(q))}">${escapeHtml(Lang.name(q))}</span>`;
+    };
+    document.getElementById('pFather').innerHTML = p.father ? chip(p.father,'parent') : '<span style="color:var(--gray);font-size:12px">—</span>';
+    document.getElementById('pMother').innerHTML = p.mother ? chip(p.mother,'parent') : '<span style="color:var(--gray);font-size:12px">—</span>';
+    document.getElementById('pSpouses').innerHTML = (p.spouses||[]).map(s=>chip(s,'wife')).join('') || '<span style="color:var(--gray);font-size:12px">—</span>';
+    document.getElementById('pChildren').innerHTML = (p.children||[]).map(c=>chip(c,'child')).join('') || '<span style="color:var(--gray);font-size:12px">—</span>';
+    document.getElementById('pSiblings').innerHTML = (p.siblings||[]).map(s=>chip(s,'child')).join('') || '<span style="color:var(--gray);font-size:12px">—</span>';
+
+    // Wire chip navigation
+    panel.querySelectorAll('.chip').forEach(ch=>{
+      ch.onclick = ()=> {
+        const rid = ch.dataset.id;
+        select(rid);
+        requestAnimationFrame(()=> Render.revealTo(rid));
+      };
+    });
+
+    panel.classList.toggle('open', opts.open !== false);
+  }
+
+  document.getElementById('profileClose').onclick = ()=> panel.classList.remove('open');
+
+  document.getElementById('pExpand').onclick = ()=>{
+    if(!selected) return;
+    const id = selected;
+    panel.classList.remove('open');
+    requestAnimationFrame(()=> Render.expand(id));
+  };
+  document.getElementById('pFocus').onclick = ()=>{
+    if(!selected) return;
+    Render.centerOn(selected);
+  };
+
+  return { select, get selected(){return selected} };
+})();
+
+/* ============================================================
+   MODULE 5 — SEARCH
+   ============================================================ */
+const Search = (() => {
+  const input = document.getElementById('searchInput');
+  const results = document.getElementById('searchResults');
+  input.addEventListener('input', ()=>{
+    const q = input.value.trim().toLowerCase();
+    if(!q){ results.classList.remove('open'); return; }
+    const matches = Object.values(DATA)
+      .filter(p => p.name.toLowerCase().includes(q) || (p.am && p.am.includes(input.value.trim())))
+      .slice(0,10);
+    results.innerHTML = matches.map(p=>`
+      <button data-id="${p.id}">
+        ${escapeHtml(Lang.name(p))}
+        <small>${escapeHtml(Lang.other(p))}${p.refs ? ' · ' + escapeHtml(p.refs) : ''}</small>
+      </button>
+    `).join('') || '<div style="padding:12px;color:var(--gray);font-size:12px">No matches</div>';
+    results.classList.add('open');
+    results.querySelectorAll('button').forEach(b=>{
+      b.onclick = ()=> {
+        const id = b.dataset.id;
+        input.value = Lang.name(DATA[id]);
+        results.classList.remove('open');
+        Interactions.select(id);
+        requestAnimationFrame(()=> Render.revealTo(id));
+      };
+    });
+  });
+  document.addEventListener('click', e=>{
+    if(!e.target.closest('.search-wrap')) results.classList.remove('open');
+  });
+  return {};
+})();
+
+/* ============================================================
+   MODULE 6 — JOURNEY (cinematic)
+   ============================================================ */
+const Journey = (() => {
+  const stops = [
+    {id:'adam', title:'Adam & Eve — The Beginning', desc:'Creation, the garden, and the first family.'},
+    {id:'seth', title:'Seth — The Promise Line', desc:'After Abel, Seth carries the line forward.'},
+    {id:'noah', title:'Noah — The Flood', desc:'Righteous Noah, the ark, and the covenant.'},
+    {id:'abraham', title:'Abraham — Father of Nations', desc:'Called out of Ur, promised a multitude of descendants.'},
+    {id:'isaac', title:'Isaac — The Son of Promise', desc:'Born to Abraham and Sarah in their old age.'},
+    {id:'jacob', title:'Jacob (Israel) — The Twelve Tribes', desc:'Father of the tribes, renamed Israel.'},
+    {id:'judah', title:'Judah — The Royal Line', desc:'His line leads to David and to the Messiah.'},
+    {id:'david', title:'David — The King', desc:'Shepherd, psalmist, king; the royal line of Jesus.'},
+    {id:'solomon', title:'Solomon — The Temple', desc:'David\'s son through whom Matthew traces the royal line.'},
+    {id:'joseph', title:'Joseph — Legal Father', desc:'Husband of Mary; the earthly/legal father of Jesus.'},
+    {id:'jesus', title:'Jesus Christ — The Savior', desc:'The Messiah, the fulfillment of both genealogies.'}
+  ];
+  let idx = 0, active = false;
+  const bar = document.getElementById('journeyBar');
+  const fill = document.getElementById('journeyFill');
+  const titleEl = document.getElementById('journeyTitle');
+  const descEl = document.getElementById('journeyDesc');
+
+  function show(i){
+    idx = Math.max(0, Math.min(stops.length-1, i));
+    const s = stops[idx];
+    const p = DATA[s.id];
+    Render.revealTo(s.id, {follow:false});
+    if(p && (p.children||[]).length) Render.expand(s.id, {follow:false});
+    Interactions.select(s.id);
+    const ids = [s.id, ...((p&&p.spouses)||[])];
+    ((p&&p.children)||[]).forEach(c=>{
+      ids.push(c);
+      ((DATA[c]&&DATA[c].spouses)||[]).forEach(sp=>ids.push(sp));
+    });
+    Render.focusNodes(ids, 60, {minScale:0.28, maxScale:1});
+    titleEl.textContent = s.title;
+    descEl.textContent = s.desc;
+    fill.style.width = ((idx+1)/stops.length*100)+'%';
+  }
+
+  function start(){
+    active = true;
+    bar.classList.add('active');
+    document.getElementById('journeyToggle').classList.add('active');
+    idx = 0;
+    show(0);
+  }
+  function exit(){
+    active = false;
+    bar.classList.remove('active');
+    document.getElementById('journeyToggle').classList.remove('active');
+  }
+
+  document.getElementById('journeyPrev').onclick = ()=> show(idx-1);
+  document.getElementById('journeyNext').onclick = ()=> show(idx+1);
+  document.getElementById('journeyExit').onclick = exit;
+
+  return { start, exit, show, get active(){return active} };
+})();
+
+/* ============================================================
+   MODULE 7 — STATIC CONTENT (timeline & verses)
+   ============================================================ */
+(function fillStatic(){
+  const timeline = [
+    {era:'Beginning', title:'Creation', text:'God creates the heavens, the earth, and all living things (Genesis 1–2).'},
+    {era:'First Family', title:'Adam and Eve', text:'The first man and woman; the fall and the promise of redemption (Genesis 3–5).'},
+    {era:'Judgment', title:'Noah and the Flood', text:'Noah builds the ark; God preserves his family and establishes a covenant (Genesis 6–9).'},
+    {era:'Calling', title:'Abraham', text:'Called out of Ur; promised a great nation and a blessing to all peoples (Genesis 12–25).'},
+    {era:'Promise', title:'Isaac', text:'The son of promise, born to Abraham and Sarah (Genesis 21).'},
+    {era:'Twelve Tribes', title:'Jacob', text:'Renamed Israel; father of the twelve tribes (Genesis 25–35).'},
+    {era:'Egypt', title:'Joseph', text:'Sold into Egypt, rises to power, and preserves his family (Genesis 37–50).'},
+    {era:'Exodus', title:'Moses', text:'Leads Israel out of Egypt and receives the Law (Exodus–Deuteronomy).'},
+    {era:'Kingdom', title:'David', text:'Shepherd, psalmist, and king; the royal line of the Messiah (1–2 Samuel).'},
+    {era:'Exile', title:'Babylonian Exile', text:'Judah is carried into exile; the royal line continues (2 Kings; Matthew 1:11–12).'},
+    {era:'Fulfillment', title:'Birth of Jesus', text:'The Messiah is born in Bethlehem, fulfilling the genealogies (Matthew 1; Luke 2).'}
+  ];
+  document.getElementById('timelineList').innerHTML = timeline.map(t=>`
+    <div class="tl-item">
+      <div class="era">${t.era}</div>
+      <h3>${t.title}</h3>
+      <p>${t.text}</p>
+    </div>
+  `).join('');
+
+  const verses = [
+    {ref:'Genesis 1–5', text:'“In the beginning God created the heavens and the earth.”', note:'Creation, Adam and Eve, Cain, Abel, Seth, and the generations of the first family.'},
+    {ref:'Genesis 10–12', text:'“The LORD had said to Abram, ‘Go from your country… and I will make you into a great nation.’”', note:'The table of nations, Noah\'s descendants, and the call of Abraham.'},
+    {ref:'Genesis 25–35', text:'“Isaac prayed to the LORD on behalf of his wife… and Rebekah became pregnant with twins.”', note:'Isaac, Rebekah, Esau, Jacob, and the twelve sons of Israel.'},
+    {ref:'Genesis 38', text:'“Judah said, ‘She is more righteous than I.’”', note:'Judah, Tamar, Perez, and Zerah — the line that leads to David.'},
+    {ref:'Ruth 4', text:'“Boaz took Ruth and she became his wife… and she gave birth to a son, Obed.”', note:'Ruth, Boaz, Obed, Jesse, and David.'},
+    {ref:'2 Samuel 7', text:'“Your house and your kingdom will endure forever before me.”', note:'God\'s covenant with David — the royal line of the Messiah.'},
+    {ref:'Matthew 1:1–17', text:'“A record of the genealogy of Jesus Christ the son of David, the son of Abraham.”', note:'The royal line through Solomon and the kings of Judah to Joseph.'},
+    {ref:'Luke 3:23–38', text:'“Now Jesus himself was about thirty years old when he began his ministry. He was the son, so it was thought, of Joseph…”', note:'The line through David\'s son Nathan, traced back to Adam.'}
+  ];
+  document.getElementById('versesGrid').innerHTML = verses.map(v=>`
+    <div class="verse-card">
+      <div class="ref">${v.ref}</div>
+      <div class="text">${v.text}</div>
+      <div class="note">${v.note}</div>
+    </div>
+  `).join('');
+
+  // Particles
+  const pc = document.getElementById('particles');
+  for(let i=0;i<28;i++){
+    const d = document.createElement('div');
+    d.className = 'particle';
+    const s = 2 + Math.random()*4;
+    d.style.width = s+'px'; d.style.height = s+'px';
+    d.style.left = Math.random()*100+'%';
+    d.style.bottom = '-10px';
+    d.style.animationDuration = (12+Math.random()*18)+'s';
+    d.style.animationDelay = (Math.random()*10)+'s';
+    pc.appendChild(d);
+  }
+})();
+
+/* ============================================================
+   MODULE 8 — TOOLBAR WIRING
+   ============================================================ */
+document.getElementById('zoomIn').onclick = ()=> Render.zoom(1.18);
+document.getElementById('zoomOut').onclick = ()=> Render.zoom(0.85);
+document.getElementById('resetView').onclick = ()=> Render.reset();
+document.getElementById('expandAll').onclick = ()=> Render.showAll();
+document.getElementById('collapseAll').onclick = ()=> Render.collapseAll();
+document.getElementById('modeAll').onclick = ()=> Render.showAll();
+document.getElementById('modeExplore').onclick = ()=> Render.explore();
+function setLang(code){
+  Lang.code = code === 'am' ? 'am' : 'en';
+  document.body.classList.toggle('lang-am', Lang.code === 'am');
+  document.documentElement.lang = Lang.code === 'am' ? 'am' : 'en';
+  document.getElementById('langEn').classList.toggle('active', Lang.code === 'en');
+  document.getElementById('langAm').classList.toggle('active', Lang.code === 'am');
+  document.getElementById('searchInput').placeholder = Lang.code === 'am' ? 'ስም ፈልግ…' : 'Search a name…';
+  Render.relabel();
+  if(Interactions.selected){
+    const open = document.getElementById('profilePanel').classList.contains('open');
+    Interactions.select(Interactions.selected, { open });
+  }
+}
+document.getElementById('langEn').onclick = () => setLang('en');
+document.getElementById('langAm').onclick = () => setLang('am');
+document.getElementById('stepNext').onclick = ()=> Render.stepNext();
+document.getElementById('stepPrev').onclick = ()=> Render.stepPrev();
+document.addEventListener('keydown', (e)=>{
+  if(e.target.closest('input, textarea')) return;
+  if(e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+  const tree = document.getElementById('tree').getBoundingClientRect();
+  if(!(tree.top < window.innerHeight * 0.75 && tree.bottom > 80)) return;
+  e.preventDefault();
+  if(e.key === 'ArrowDown') Render.stepNext();
+  else Render.stepPrev();
+});
+document.getElementById('centerSel').onclick = ()=>{
+  if(Interactions.selected) Render.centerOn(Interactions.selected);
+};
+document.getElementById('journeyToggle').onclick = ()=>{
+  Journey.active ? Journey.exit() : Journey.start();
+};
+document.getElementById('fullscreen').onclick = ()=>{
+  const el = document.getElementById('tree');
+  if(!document.fullscreenElement){
+    el.requestFullscreen?.() || el.webkitRequestFullscreen?.();
+  } else {
+    document.exitFullscreen?.() || document.webkitExitFullscreen?.();
+  }
+};
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+window.addEventListener('load', ()=>{
+  Render.init();
+  Interactions.select('adam', {open:false});
+});
+</script>
+</body>
+</html>
