@@ -400,7 +400,23 @@ body.lang-am .chip{font-size:13px}
 .profile-head .sub{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gray);margin-top:4px}
 .profile-head .refs{font-size:11px;color:var(--blue);margin-top:8px;line-height:1.5}
 .profile-body{padding:18px 22px 30px}
-.profile-body p.bio{font-size:13.5px;line-height:1.7;color:#dbe4ec;margin-bottom:18px}
+.profile-body p.bio{font-size:13.5px;line-height:1.7;color:#dbe4ec;margin-bottom:14px}
+.scripture{
+  margin:0 0 10px;padding:12px 14px;
+  border-left:3px solid var(--gold);
+  background:rgba(212,175,55,.07);
+  border-radius:0 10px 10px 0;
+}
+.scripture .scripture-ref{
+  font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold);font-weight:600;margin-bottom:6px;font-family:var(--font-sans);
+}
+.scripture p{
+  font-family:var(--font-serif);font-size:13.5px;line-height:1.65;
+  color:var(--cream);font-style:italic;margin:0;
+}
+.scripture-note{font-size:10px;color:var(--gray);margin:0 0 16px}
+.scripture-missing{font-size:12.5px;color:var(--gray);margin:0 0 16px;line-height:1.5}
 .rel-block{margin-bottom:16px}
 .rel-block h4{
   font-size:10px;letter-spacing:.18em;text-transform:uppercase;
@@ -571,6 +587,7 @@ footer .gold{color:var(--gold)}
   </div>
   <div class="profile-body">
     <p class="bio" id="pBio">—</p>
+    <div id="pVerses"></div>
     <div class="rel-block"><h4>Father</h4><div class="chips" id="pFather"></div></div>
     <div class="rel-block"><h4>Mother</h4><div class="chips" id="pMother"></div></div>
     <div class="rel-block"><h4>Spouse(s)</h4><div class="chips" id="pSpouses"></div></div>
@@ -733,11 +750,11 @@ const DATA = (() => {
 
   const jacobSons = {
     leah:['reuben','simeon','levi','judah','issachar','zebulun'],
-    rachel:['joseph','benjamin'],
+    rachel:['joseph_son','benjamin'],
     bilhah:['dan','naphtali'],
     zilpah:['gad','asher']
   };
-  const sonNames = {reuben:'Reuben',simeon:'Simeon',levi:'Levi',judah:'Judah',issachar:'Issachar',zebulun:'Zebulun',joseph:'Joseph',benjamin:'Benjamin',dan:'Dan',naphtali:'Naphtali',gad:'Gad',asher:'Asher'};
+  const sonNames = {reuben:'Reuben',simeon:'Simeon',levi:'Levi',judah:'Judah',issachar:'Issachar',zebulun:'Zebulun',joseph_son:'Joseph',benjamin:'Benjamin',dan:'Dan',naphtali:'Naphtali',gad:'Gad',asher:'Asher'};
   const sonBios = {
     reuben:'Firstborn of Jacob; lost the birthright through his actions.',
     simeon:'Son of Jacob; ancestor of the Simeonite tribe.',
@@ -745,7 +762,7 @@ const DATA = (() => {
     judah:'Son of Jacob; his line leads to King David and to Jesus Christ (Matthew 1:2–3).',
     issachar:'Son of Jacob; ancestor of the tribe of Issachar.',
     zebulun:'Son of Jacob; ancestor of the tribe of Zebulun.',
-    joseph:'Son of Rachel; sold into Egypt, became ruler under Pharaoh, and preserved his family.',
+    joseph_son:'Son of Rachel; sold into Egypt, became ruler under Pharaoh, and preserved his family.',
     benjamin:'Son of Rachel; ancestor of the tribe of Benjamin.',
     dan:'Son of Bilhah; ancestor of the tribe of Dan.',
     naphtali:'Son of Bilhah; ancestor of the tribe of Naphtali.',
@@ -880,7 +897,7 @@ const DATA = (() => {
     rebekah:'ርብቃ', esau:'ዔሳው', jacob:'ያዕቆብ (እስራኤል)',
     leah:'ልያ', rachel:'ራሔል', bilhah:'ባላ', zilpah:'ዘለፋ',
     reuben:'ሮቤል', simeon:'ስምዖን', levi:'ሌዊ', judah:'ይሁዳ',
-    issachar:'ይሳኮር', zebulun:'ዛብሎን', joseph:'ዮሴፍ', benjamin:'ብንያም',
+    issachar:'ይሳኮር', zebulun:'ዛብሎን', joseph_son:'ዮሴፍ', benjamin:'ብንያም',
     dan:'ዳን', naphtali:'ንፍታሌም', gad:'ጋድ', asher:'አሴር',
     tamar:'ትዕማር', perez:'ፋሬስ', zerah:'ዛራ',
     hezron:'ኤስሮም', ram:'አራም', amminadab:'አሚናዳብ', nahshon:'ነአሶን',
@@ -936,6 +953,108 @@ function escapeHtml(s){
     '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
   }[ch]));
 }
+
+/* Bible verses shown in the profile sidebar. Text is the King James Version. */
+(function attachVerses(){
+  const q = (ref, text) => ({ ref, text: text.replace(/\s+/g, ' ').trim() });
+  const one = (ids, verse) => ids.forEach(id => { if(DATA[id]) DATA[id].verses = [verse]; });
+  const set = (id, verses) => { if(DATA[id]) DATA[id].verses = verses; };
+
+  set('adam', [q('Genesis 2:7', 'And the LORD God formed man of the dust of the ground, and breathed into his nostrils the breath of life; and man became a living soul.')]);
+  set('eve', [q('Genesis 3:20', 'And Adam called his wife’s name Eve; because she was the mother of all living.')]);
+  set('cain', [q('Genesis 4:8', 'And Cain talked with Abel his brother: and it came to pass, when they were in the field, that Cain rose up against Abel his brother, and slew him.')]);
+  set('abel', [q('Genesis 4:4', 'And Abel, he also brought of the firstlings of his flock and of the fat thereof. And the LORD had respect unto Abel and to his offering.')]);
+  set('seth', [q('Genesis 4:25', 'And Adam knew his wife again; and she bare a son, and called his name Seth: For God, said she, hath appointed me another seed instead of Abel, whom Cain slew.')]);
+  set('other_adam', [q('Genesis 5:4', 'And the days of Adam after he had begotten Seth were eight hundred years: and he begat sons and daughters.')]);
+  set('enosh', [q('Genesis 4:26', 'And to Seth, to him also there was born a son; and he called his name Enos: then began men to call upon the name of the LORD.')]);
+  set('kenan', [q('Genesis 5:12', 'And Cainan lived seventy years, and begat Mahalaleel.')]);
+  set('mahalalel', [q('Genesis 5:15', 'And Mahalaleel lived sixty and five years, and begat Jared.')]);
+  set('jared', [q('Genesis 5:18', 'And Jared lived an hundred sixty and two years, and he begat Enoch.')]);
+  set('enoch', [q('Genesis 5:24', 'And Enoch walked with God: and he was not; for God took him.')]);
+  set('methuselah', [q('Genesis 5:27', 'And all the days of Methuselah were nine hundred sixty and nine years: and he died.')]);
+  set('lamech', [q('Genesis 5:29', 'And he called his name Noah, saying, This same shall comfort us concerning our work and toil of our hands, because of the ground which the LORD hath cursed.')]);
+  set('noah', [q('Genesis 6:9', 'These are the generations of Noah: Noah was a just man and perfect in his generations, and Noah walked with God.')]);
+  set('wife_noah', [q('Genesis 7:7', 'And Noah went in, and his sons, and his wife, and his sons’ wives with him, into the ark, because of the waters of the flood.')]);
+  one(['shem','ham','japheth'], q('Genesis 5:32', 'And Noah was five hundred years old: and Noah begat Shem, Ham, and Japheth.'));
+  set('arphaxad', [q('Genesis 11:10', 'These are the generations of Shem: Shem was an hundred years old, and begat Arphaxad two years after the flood.')]);
+  set('shelah', [q('Genesis 11:12', 'And Arphaxad lived five and thirty years, and begat Salah.')]);
+  set('eber', [q('Genesis 11:14', 'And Salah lived thirty years, and begat Eber.')]);
+  set('peleg', [q('Genesis 11:16', 'And Eber lived four and thirty years, and begat Peleg.')]);
+  set('reu', [q('Genesis 11:18', 'And Peleg lived thirty years, and begat Reu.')]);
+  set('serug', [q('Genesis 11:20', 'And Reu lived two and thirty years, and begat Serug.')]);
+  set('nahor', [q('Genesis 11:22', 'And Serug lived thirty years, and begat Nahor.')]);
+  set('terah', [q('Genesis 11:26', 'And Terah lived seventy years, and begat Abram, Nahor, and Haran.')]);
+  set('note_cainan', [q('Luke 3:36', 'Which was the son of Cainan, which was the son of Arphaxad, which was the son of Sem, which was the son of Noe, which was the son of Lamech.')]);
+  set('abraham', [q('Genesis 12:2', 'And I will make of thee a great nation, and I will bless thee, and make thy name great; and thou shalt be a blessing.')]);
+  set('sarah', [q('Genesis 17:15', 'And God said unto Abraham, As for Sarai thy wife, thou shalt not call her name Sarai, but Sarah shall her name be.')]);
+  set('hagar', [q('Genesis 16:1', 'Now Sarai Abram’s wife bare him no children: and she had an handmaid, an Egyptian, whose name was Hagar.')]);
+  set('keturah', [q('Genesis 25:1', 'Then again Abraham took a wife, and her name was Keturah.')]);
+  set('isaac', [q('Genesis 17:19', 'And God said, Sarah thy wife shall bear thee a son indeed; and thou shalt call his name Isaac: and I will establish my covenant with him for an everlasting covenant, and with his seed after him.')]);
+  set('ishmael', [q('Genesis 16:11', 'And the angel of the LORD said unto her, Behold, thou art with child, and shalt bear a son, and shalt call his name Ishmael; because the LORD hath heard thy affliction.')]);
+  one(['zimran','jokshan','medan','midian','ishbak','shuah'], q('Genesis 25:2', 'And she bare him Zimran, and Jokshan, and Medan, and Midian, and Ishbak, and Shuah.'));
+  set('rebekah', [q('Genesis 25:21', 'And Isaac intreated the LORD for his wife, because she was barren: and the LORD was intreated of him, and Rebekah his wife conceived.')]);
+  set('esau', [q('Genesis 25:34', 'Then Jacob gave Esau bread and pottage of lentiles; and he did eat and drink, and rose up, and went his way: thus Esau despised his birthright.')]);
+  set('jacob', [q('Genesis 32:28', 'And he said, Thy name shall be called no more Jacob, but Israel: for as a prince hast thou power with God and with men, and hast prevailed.')]);
+  set('leah', [q('Genesis 29:16', 'And Laban had two daughters: the name of the elder was Leah, and the name of the younger was Rachel.')]);
+  set('rachel', [q('Genesis 29:18', 'And Jacob loved Rachel; and said, I will serve thee seven years for Rachel thy younger daughter.')]);
+  set('zilpah', [q('Genesis 29:24', 'And Laban gave unto his daughter Leah Zilpah his maid for an handmaid.')]);
+  set('bilhah', [q('Genesis 29:29', 'And Laban gave to Rachel his daughter Bilhah his handmaid to be her maid.')]);
+  set('reuben', [q('Genesis 29:32', 'And Leah conceived, and bare a son, and she called his name Reuben: for she said, Surely the LORD hath looked upon my affliction; now therefore my husband will love me.')]);
+  set('simeon', [q('Genesis 29:33', 'And she conceived again, and bare a son; and said, Because the LORD hath heard that I was hated, he hath therefore given me this son also: and she called his name Simeon.')]);
+  set('levi', [q('Genesis 29:34', 'And she conceived again, and bare a son; and said, Now this time will my husband be joined unto me, because I have born him three sons: therefore was his name called Levi.')]);
+  set('judah', [q('Genesis 29:35', 'And she conceived again, and bare a son: and she said, Now will I praise the LORD: therefore she called his name Judah; and left bearing.')]);
+  set('dan', [q('Genesis 30:6', 'And Rachel said, God hath judged me, and hath also heard my voice, and hath given me a son: therefore called she his name Dan.')]);
+  set('naphtali', [q('Genesis 30:8', 'And Rachel said, With great wrestlings have I wrestled with my sister, and I have prevailed: and she called his name Naphtali.')]);
+  set('gad', [q('Genesis 30:11', 'And Leah said, A troop cometh: and she called his name Gad.')]);
+  set('asher', [q('Genesis 30:13', 'And Leah said, Happy am I, for the daughters will call me blessed: and she called his name Asher.')]);
+  set('issachar', [q('Genesis 30:18', 'And Leah said, God hath given me my hire, because I have given my maiden to my husband: and she called his name Issachar.')]);
+  set('zebulun', [q('Genesis 30:20', 'And Leah said, God hath endued me with a good dowry; now will my husband dwell with me, because I have born him six sons: and she called his name Zebulun.')]);
+  set('joseph_son', [q('Genesis 30:24', 'And she called his name Joseph; and said, The LORD shall add to me another son.')]);
+  set('benjamin', [q('Genesis 35:18', 'And it came to pass, as her soul was in departing, (for she died) that she called his name Ben-oni: but his father called him Benjamin.')]);
+  set('tamar', [q('Matthew 1:3', 'And Judas begat Phares and Zara of Thamar; and Phares begat Esrom; and Esrom begat Aram.')]);
+  set('perez', [q('Genesis 38:29', 'And it came to pass, as he drew back his hand, that, behold, his brother came out: and she said, How hast thou broken forth? this breach be upon thee: therefore his name was called Pharez.')]);
+  set('zerah', [q('Genesis 38:30', 'And afterward came out his brother, that had the scarlet thread upon his hand: and his name was called Zarah.')]);
+  set('hezron', [q('Ruth 4:18', 'Now these are the generations of Pharez: Pharez begat Hezron.')]);
+  one(['ram','amminadab'], q('Ruth 4:19', 'And Hezron begat Ram, and Ram begat Amminadab.'));
+  one(['nahshon','salmon'], q('Ruth 4:20', 'And Amminadab begat Nahshon, and Nahshon begat Salmon.'));
+  set('boaz', [q('Ruth 4:13', 'So Boaz took Ruth, and she was his wife: and when he went in unto her, the LORD gave her conception, and she bare a son.')]);
+  set('ruth', [q('Ruth 4:13', 'So Boaz took Ruth, and she was his wife: and when he went in unto her, the LORD gave her conception, and she bare a son.')]);
+  set('obed', [q('Ruth 4:17', 'And the women her neighbours gave it a name, saying, There is a son born to Naomi; and they called his name Obed: he is the father of Jesse, the father of David.')]);
+  set('jesse', [q('Ruth 4:22', 'And Obed begat Jesse, and Jesse begat David.')]);
+  set('david', [q('1 Samuel 16:13', 'Then Samuel took the horn of oil, and anointed him in the midst of his brethren: and the Spirit of the LORD came upon David from that day forward. So Samuel rose up, and went to Ramah.')]);
+  set('rahab', [q('Joshua 6:25', 'And Joshua saved Rahab the harlot alive, and her father’s household, and all that she had; and she dwelleth in Israel even unto this day; because she hid the messengers, which Joshua sent to spy out Jericho.')]);
+  set('bathsheba', [q('2 Samuel 11:3', 'And David sent and enquired after the woman. And one said, Is not this Bath-sheba, the daughter of Eliam, the wife of Uriah the Hittite?')]);
+  one(['amnon','ahinoam'], q('2 Samuel 3:2', 'And unto David were sons born in Hebron: and his firstborn was Amnon, of Ahinoam the Jezreelitess.'));
+  one(['absalom','maacah'], q('2 Samuel 3:3', 'And his second, Chileab, of Abigail the wife of Nabal the Carmelite; and the third, Absalom the son of Maacah the daughter of Talmai king of Geshur.'));
+  set('solomon', [q('1 Kings 3:12', 'Behold, I have done according to thy words: lo, I have given thee a wise and an understanding heart; so that there was none like thee before thee, neither after thee shall any arise like unto thee.')]);
+  set('nathan_son', [q('2 Samuel 5:14', 'And these be the names of those that were born unto him in Jerusalem; Shammuah, and Shobab, and Nathan, and Solomon.')]);
+
+  one(['rehoboam','abijah','asa'], q('Matthew 1:7', 'And Solomon begat Roboam; and Roboam begat Abia; and Abia begat Asa.'));
+  one(['jehoshaphat','joram','uzziah'], q('Matthew 1:8', 'And Asa begat Josaphat; and Josaphat begat Joram; and Joram begat Ozias.'));
+  one(['jotham','ahaz','hezekiah'], q('Matthew 1:9', 'And Ozias begat Joatham; and Joatham begat Achaz; and Achaz begat Ezekias.'));
+  one(['manasseh','amon','josiah'], q('Matthew 1:10', 'And Ezekias begat Manasses; and Manasses begat Amon; and Amon begat Josias.'));
+  set('jeconiah', [q('Matthew 1:11', 'And Josias begat Jechonias and his brethren, about the time they were carried away to Babylon.')]);
+  one(['shealtiel_mt','zerubbabel_mt'], q('Matthew 1:12', 'And after they were brought to Babylon, Jechonias begat Salathiel; and Salathiel begat Zorobabel.'));
+  one(['abiud','eliakim','azor'], q('Matthew 1:13', 'And Zorobabel begat Abiud; and Abiud begat Eliakim; and Eliakim begat Azor.'));
+  one(['zadok','achim','eliud'], q('Matthew 1:14', 'And Azor begat Sadoc; and Sadoc begat Achim; and Achim begat Eliud.'));
+  one(['eleazar','matthan','jacob_mt'], q('Matthew 1:15', 'And Eliud begat Eleazar; and Eleazar begat Matthan; and Matthan begat Jacob.'));
+  set('joseph', [q('Matthew 1:16', 'And Jacob begat Joseph the husband of Mary, of whom was born Jesus, who is called Christ.')]);
+  set('mary', [q('Luke 1:30', 'And the angel said unto her, Fear not, Mary: for thou hast found favour with God.')]);
+  set('jesus', [
+    q('Matthew 1:1', 'The book of the generation of Jesus Christ, the son of David, the son of Abraham.'),
+    q('Luke 1:31', 'And, behold, thou shalt conceive in thy womb, and bring forth a son, and shalt call his name JESUS.')
+  ]);
+
+  one(['joseph_lk4','heli'], q('Luke 3:23', 'And Jesus himself began to be about thirty years of age, being (as was supposed) the son of Joseph, which was the son of Heli.'));
+  one(['matthat2','levi_lk2','melchi2','jannai','joseph_lk3'], q('Luke 3:24', 'Which was the son of Matthat, which was the son of Levi, which was the son of Melchi, which was the son of Janna, which was the son of Joseph.'));
+  one(['mattathias2','amos','nahum','esli','naggai'], q('Luke 3:25', 'Which was the son of Mattathias, which was the son of Amos, which was the son of Naum, which was the son of Esli, which was the son of Nagge.'));
+  one(['maath','mattathias','semei','joseph_lk2','judah_lk2'], q('Luke 3:26', 'Which was the son of Maath, which was the son of Mattathias, which was the son of Semei, which was the son of Joseph, which was the son of Juda.'));
+  one(['joanna','rhesa','zerubbabel_lk','shealtiel_lk','neri'], q('Luke 3:27', 'Which was the son of Joanna, which was the son of Rhesa, which was the son of Zorobabel, which was the son of Salathiel, which was the son of Neri.'));
+  one(['melchi','addi','cosam','elmodam','er_lk'], q('Luke 3:28', 'Which was the son of Melchi, which was the son of Addi, which was the son of Cosam, which was the son of Elmodam, which was the son of Er.'));
+  one(['joshua_lk','eliezer','jorim','matthat_lk','levi_lk'], q('Luke 3:29', 'Which was the son of Jose, which was the son of Eliezer, which was the son of Jorim, which was the son of Matthat, which was the son of Levi.'));
+  one(['simeon_lk','judah_lk','joseph_lk1','jonam','eliakim_lk'], q('Luke 3:30', 'Which was the son of Simeon, which was the son of Juda, which was the son of Joseph, which was the son of Jonan, which was the son of Eliakim.'));
+  one(['melea','menna','mattatha'], q('Luke 3:31', 'Which was the son of Melea, which was the son of Menan, which was the son of Mattatha, which was the son of Nathan, which was the son of David.'));
+})();
 
 /* ============================================================
    MODULE 2 — LAYOUT ENGINE
@@ -1738,6 +1857,20 @@ const Interactions = (() => {
     document.getElementById('pSub').textContent = sub;
     document.getElementById('pRefs').textContent = p.refs || '';
     document.getElementById('pBio').textContent = p.bio || '';
+    const verseBox = document.getElementById('pVerses');
+    const verses = p.verses || [];
+    if(verses.length){
+      verseBox.innerHTML = verses.map(v => `
+        <blockquote class="scripture">
+          <div class="scripture-ref">${escapeHtml(v.ref)}</div>
+          <p>${escapeHtml(v.text)}</p>
+        </blockquote>
+      `).join('') + '<div class="scripture-note">King James Version</div>';
+    } else if(p.wifeUnnamed){
+      verseBox.innerHTML = '<p class="scripture-missing">Scripture does not record a verse that names her.</p>';
+    } else {
+      verseBox.innerHTML = '';
+    }
 
     const chip = (id2, cls) => {
       const q = DATA[id2]; if(!q) return '';
