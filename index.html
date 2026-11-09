@@ -428,54 +428,6 @@ body.lang-am .chip{font-size:13px}
 .profile-actions .secondary{background:transparent;border:1px solid rgba(212,175,55,.4);color:var(--light-gold)}
 .profile-actions .secondary:hover{background:rgba(212,175,55,.12)}
 
-/* ============================================================
-   CONTENT SECTIONS (timeline, verses, about)
-   ============================================================ */
-.content-section{padding:70px 24px;max-width:1100px;margin:0 auto}
-.content-section h2{font-size:clamp(24px,4vw,38px);color:var(--light-gold);text-align:center;margin-bottom:8px}
-.content-section .lead{text-align:center;color:var(--gray);max-width:600px;margin:0 auto 44px;font-size:14px}
-
-/* Timeline */
-.timeline{position:relative;padding-left:40px}
-.timeline::before{
-  content:"";position:absolute;left:14px;top:0;bottom:0;width:2px;
-  background:linear-gradient(180deg,transparent,var(--gold),transparent);
-}
-.tl-item{position:relative;margin-bottom:26px;padding-left:14px}
-.tl-item::before{
-  content:"";position:absolute;left:-33px;top:6px;width:12px;height:12px;
-  border-radius:50%;background:var(--navy);border:2px solid var(--gold);
-  box-shadow:0 0 12px rgba(212,175,55,.5);
-}
-.tl-item h3{font-size:16px;color:var(--light-gold);margin-bottom:4px}
-.tl-item .era{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:6px}
-.tl-item p{font-size:13px;color:var(--gray);line-height:1.6}
-
-/* Verses */
-.verses-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
-.verse-card{
-  background:var(--card-bg);border:1px solid rgba(212,175,55,.22);
-  border-radius:14px;padding:22px;transition:.25s;
-}
-.verse-card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 12px 32px rgba(212,175,55,.15)}
-.verse-card .ref{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;font-family:var(--font-sans);font-weight:600}
-.verse-card .text{font-family:var(--font-serif);font-size:14.5px;line-height:1.65;color:var(--cream);font-style:italic}
-.verse-card .note{font-size:11px;color:var(--gray);margin-top:10px;line-height:1.5}
-
-/* About / distinction panel */
-.distinction{
-  background:linear-gradient(140deg,rgba(212,175,55,.08),rgba(16,44,66,.6));
-  border:1px solid rgba(212,175,55,.3);border-radius:16px;padding:28px;
-  margin-top:30px;
-}
-.distinction h3{color:var(--light-gold);font-size:18px;margin-bottom:12px}
-.distinction p{font-size:13.5px;line-height:1.75;color:#dbe4ec;margin-bottom:12px}
-.distinction .cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px}
-@media(max-width:640px){.distinction .cols{grid-template-columns:1fr}}
-.distinction .col{background:rgba(0,0,0,.25);border-radius:10px;padding:16px}
-.distinction .col h4{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
-.distinction .col p{font-size:12.5px;margin:0}
-
 footer{
   text-align:center;padding:40px 24px;color:var(--gray);font-size:12px;
   border-top:1px solid rgba(212,175,55,.15);line-height:1.8;
@@ -526,9 +478,6 @@ footer .gold{color:var(--gold)}
   <nav>
     <a href="#hero">Home</a>
     <a href="#tree">Family Tree</a>
-    <a href="#timeline">Timeline</a>
-    <a href="#verses">Bible Verses</a>
-    <a href="#about">About</a>
   </nav>
   <div class="search-wrap">
     <input id="searchInput" type="text" placeholder="Search a name…" autocomplete="off" />
@@ -633,41 +582,6 @@ footer .gold{color:var(--gold)}
     </div>
   </div>
 </aside>
-
-<!-- Timeline -->
-<section class="content-section" id="timeline">
-  <h2>The Biblical Timeline</h2>
-  <p class="lead">Major epochs from Creation to the birth of Christ.</p>
-  <div class="timeline" id="timelineList"></div>
-</section>
-
-<!-- Verses -->
-<section class="content-section" id="verses">
-  <h2>Key Bible Verses</h2>
-  <p class="lead">The scriptural foundation for this genealogy.</p>
-  <div class="verses-grid" id="versesGrid"></div>
-</section>
-
-<!-- About / Distinction -->
-<section class="content-section" id="about">
-  <h2>Two Genealogies of Jesus</h2>
-  <p class="lead">Matthew and Luke record distinct lines. This site preserves both.</p>
-  <div class="distinction">
-    <h3>Why are there two genealogies?</h3>
-    <p>Matthew 1:1–17 traces the <strong>royal line</strong> through David's son <strong>Solomon</strong>, following the kings of Judah to Joseph, Jesus' legal/earthly father. Luke 3:23–38 traces a different line through David's son <strong>Nathan</strong>, and is often understood as Mary's lineage (or a levirate/adoptive line) — though interpreters differ. Both are preserved here as distinct branches, not merged into one sequence.</p>
-    <div class="cols">
-      <div class="col">
-        <h4>Matthew 1:1–17</h4>
-        <p>Abraham → Isaac → Jacob → Judah → Perez → … → Jesse → <strong>David</strong> → <strong>Solomon</strong> → … → the Babylonian exile → … → Joseph, husband of Mary.</p>
-      </div>
-      <div class="col">
-        <h4>Luke 3:23–38</h4>
-        <p>Jesus → Joseph (as supposed) → … → <strong>David</strong> → <strong>Nathan</strong> → … → Abraham → … → Adam → God. Preserved in its own sequence.</p>
-      </div>
-    </div>
-    <p style="margin-top:16px;font-size:12.5px;color:var(--gray)">Note: Where Scripture does not name a wife, this site displays "Wife (name not recorded in Scripture)" rather than inventing a name. Relationships that are legal or traditional (e.g., Joseph as Jesus' legal father) are labeled accordingly.</p>
-  </div>
-</section>
 
 <footer>
   <span class="gold">✝</span> Biblical Genealogy — From Adam to Jesus Christ<br>
@@ -1960,48 +1874,9 @@ const Journey = (() => {
 })();
 
 /* ============================================================
-   MODULE 7 — STATIC CONTENT (timeline & verses)
+   BACKGROUND PARTICLES
    ============================================================ */
 (function fillStatic(){
-  const timeline = [
-    {era:'Beginning', title:'Creation', text:'God creates the heavens, the earth, and all living things (Genesis 1–2).'},
-    {era:'First Family', title:'Adam and Eve', text:'The first man and woman; the fall and the promise of redemption (Genesis 3–5).'},
-    {era:'Judgment', title:'Noah and the Flood', text:'Noah builds the ark; God preserves his family and establishes a covenant (Genesis 6–9).'},
-    {era:'Calling', title:'Abraham', text:'Called out of Ur; promised a great nation and a blessing to all peoples (Genesis 12–25).'},
-    {era:'Promise', title:'Isaac', text:'The son of promise, born to Abraham and Sarah (Genesis 21).'},
-    {era:'Twelve Tribes', title:'Jacob', text:'Renamed Israel; father of the twelve tribes (Genesis 25–35).'},
-    {era:'Egypt', title:'Joseph', text:'Sold into Egypt, rises to power, and preserves his family (Genesis 37–50).'},
-    {era:'Exodus', title:'Moses', text:'Leads Israel out of Egypt and receives the Law (Exodus–Deuteronomy).'},
-    {era:'Kingdom', title:'David', text:'Shepherd, psalmist, and king; the royal line of the Messiah (1–2 Samuel).'},
-    {era:'Exile', title:'Babylonian Exile', text:'Judah is carried into exile; the royal line continues (2 Kings; Matthew 1:11–12).'},
-    {era:'Fulfillment', title:'Birth of Jesus', text:'The Messiah is born in Bethlehem, fulfilling the genealogies (Matthew 1; Luke 2).'}
-  ];
-  document.getElementById('timelineList').innerHTML = timeline.map(t=>`
-    <div class="tl-item">
-      <div class="era">${t.era}</div>
-      <h3>${t.title}</h3>
-      <p>${t.text}</p>
-    </div>
-  `).join('');
-
-  const verses = [
-    {ref:'Genesis 1–5', text:'“In the beginning God created the heavens and the earth.”', note:'Creation, Adam and Eve, Cain, Abel, Seth, and the generations of the first family.'},
-    {ref:'Genesis 10–12', text:'“The LORD had said to Abram, ‘Go from your country… and I will make you into a great nation.’”', note:'The table of nations, Noah\'s descendants, and the call of Abraham.'},
-    {ref:'Genesis 25–35', text:'“Isaac prayed to the LORD on behalf of his wife… and Rebekah became pregnant with twins.”', note:'Isaac, Rebekah, Esau, Jacob, and the twelve sons of Israel.'},
-    {ref:'Genesis 38', text:'“Judah said, ‘She is more righteous than I.’”', note:'Judah, Tamar, Perez, and Zerah — the line that leads to David.'},
-    {ref:'Ruth 4', text:'“Boaz took Ruth and she became his wife… and she gave birth to a son, Obed.”', note:'Ruth, Boaz, Obed, Jesse, and David.'},
-    {ref:'2 Samuel 7', text:'“Your house and your kingdom will endure forever before me.”', note:'God\'s covenant with David — the royal line of the Messiah.'},
-    {ref:'Matthew 1:1–17', text:'“A record of the genealogy of Jesus Christ the son of David, the son of Abraham.”', note:'The royal line through Solomon and the kings of Judah to Joseph.'},
-    {ref:'Luke 3:23–38', text:'“Now Jesus himself was about thirty years old when he began his ministry. He was the son, so it was thought, of Joseph…”', note:'The line through David\'s son Nathan, traced back to Adam.'}
-  ];
-  document.getElementById('versesGrid').innerHTML = verses.map(v=>`
-    <div class="verse-card">
-      <div class="ref">${v.ref}</div>
-      <div class="text">${v.text}</div>
-      <div class="note">${v.note}</div>
-    </div>
-  `).join('');
-
   // Particles
   const pc = document.getElementById('particles');
   for(let i=0;i<28;i++){
